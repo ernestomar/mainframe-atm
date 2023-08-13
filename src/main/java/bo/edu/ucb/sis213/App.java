@@ -52,7 +52,7 @@ public class App {
             int pinIngresado = scanner.nextInt();
             if (validarPIN(connection, pinIngresado)) {
                 pinActual = pinIngresado;
-                mostrarMenu();
+                mostrarMenu(connection);
                 break;
             } else {
                 intentos--;
@@ -84,7 +84,7 @@ public class App {
         return false;
     }
 
-    public static void mostrarMenu() {
+    public static void mostrarMenu(Connection connection) {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("\nMenú Principal:");
@@ -101,7 +101,7 @@ public class App {
                     consultarSaldo();
                     break;
                 case 2:
-                    realizarDeposito();
+                    realizarDeposito(connection);
                     break;
                 case 3:
                     realizarRetiro();
@@ -119,11 +119,30 @@ public class App {
         }
     }
 
+    public static void actualizarSaldo(Connection connection, double nuevoSaldo) throws SQLException {
+        String query = "UPDATE usuarios SET saldo = ? WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setDouble(1, nuevoSaldo);
+            preparedStatement.setInt(2, usuarioId);
+            preparedStatement.executeUpdate();
+        }
+    }
+    
+    public static void registrarOperacion(Connection connection, String tipoOperacion, double cantidad) throws SQLException {
+        String insertQuery = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, ?, ?)";
+        try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
+            insertStatement.setInt(1, usuarioId);
+            insertStatement.setString(2, tipoOperacion);
+            insertStatement.setDouble(3, cantidad);
+            insertStatement.executeUpdate();
+        }
+    }    
+
     public static void consultarSaldo() {
-        System.out.println("Su saldo actual es: $" + saldo);
+        System.out.println("\nSu saldo actual es: $" + saldo);
     }
 
-    public static void realizarDeposito() {
+    public static void realizarDeposito(Connection connection) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese la cantidad a depositar: $");
         double cantidad = scanner.nextDouble();
@@ -132,7 +151,15 @@ public class App {
             System.out.println("Cantidad no válida.");
         } else {
             saldo += cantidad;
-            System.out.println("Depósito realizado con éxito. Su nuevo saldo es: $" + saldo);
+            // System.out.println("Depósito realizado con éxito. Su nuevo saldo es: $" + saldo);
+            try {
+                actualizarSaldo(connection, saldo); 
+                registrarOperacion(connection, "Depósito", cantidad);
+                System.out.println("\nDepósito realizado con éxito. Su nuevo saldo es: $" + saldo);
+            } catch (SQLException ex) {
+                System.out.println("\nError al realizar el depósito.");
+                ex.printStackTrace();
+            }
         }
     }
 
