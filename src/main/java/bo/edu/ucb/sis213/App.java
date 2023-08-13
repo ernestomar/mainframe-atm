@@ -27,7 +27,6 @@ public class App {
             e.printStackTrace();
             throw new SQLException("MySQL Driver not found.", e);
         }
-
         return DriverManager.getConnection(jdbcUrl, USER, PASSWORD);
     }
 
@@ -104,10 +103,10 @@ public class App {
                     realizarDeposito(connection);
                     break;
                 case 3:
-                    realizarRetiro();
+                    realizarRetiro(connection);
                     break;
                 case 4:
-                    cambiarPIN();
+                    cambiarPIN(connection);
                     break;
                 case 5:
                     System.out.println("Gracias por usar el cajero. ¡Hasta luego!");
@@ -125,6 +124,9 @@ public class App {
             preparedStatement.setDouble(1, nuevoSaldo);
             preparedStatement.setInt(2, usuarioId);
             preparedStatement.executeUpdate();
+        }catch (SQLException ex) {
+            System.out.println("Error al actualizar el saldo.");
+            ex.printStackTrace();
         }
     }
     
@@ -135,6 +137,9 @@ public class App {
             insertStatement.setString(2, tipoOperacion);
             insertStatement.setDouble(3, cantidad);
             insertStatement.executeUpdate();
+        }catch (SQLException ex) {
+            System.out.println("Error al registrar la operación.");
+            ex.printStackTrace();
         }
     }    
 
@@ -151,10 +156,9 @@ public class App {
             System.out.println("Cantidad no válida.");
         } else {
             saldo += cantidad;
-            // System.out.println("Depósito realizado con éxito. Su nuevo saldo es: $" + saldo);
             try {
                 actualizarSaldo(connection, saldo); 
-                registrarOperacion(connection, "Depósito", cantidad);
+                registrarOperacion(connection, "Depo1sito", cantidad);
                 System.out.println("\nDepósito realizado con éxito. Su nuevo saldo es: $" + saldo);
             } catch (SQLException ex) {
                 System.out.println("\nError al realizar el depósito.");
@@ -163,7 +167,7 @@ public class App {
         }
     }
 
-    public static void realizarRetiro() {
+    public static void realizarRetiro(Connection connection) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese la cantidad a retirar: $");
         double cantidad = scanner.nextDouble();
@@ -174,11 +178,18 @@ public class App {
             System.out.println("Saldo insuficiente.");
         } else {
             saldo -= cantidad;
-            System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + saldo);
+            try {
+                actualizarSaldo(connection, saldo); 
+                registrarOperacion(connection, "Retiro", -cantidad); 
+                System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + saldo);
+            } catch (SQLException ex) {
+                System.out.println("Error al realizar el retiro.");
+                ex.printStackTrace();
+            }
         }
     }
 
-    public static void cambiarPIN() {
+    public static void cambiarPIN(Connection connection) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese su PIN actual: ");
         int pinIngresado = scanner.nextInt();
@@ -191,7 +202,14 @@ public class App {
 
             if (nuevoPin == confirmacionPin) {
                 pinActual = nuevoPin;
-                System.out.println("PIN actualizado con éxito.");
+                try {
+                    actualizarPIN(connection, nuevoPin); // Actualizar el PIN en la base de datos
+                    registrarOperacion(connection, "Cambio de PIN", 0.0); // Registrar la operación en el historial
+                    System.out.println("PIN actualizado con éxito.");
+                } catch (SQLException ex) {
+                    System.out.println("Error al actualizar el PIN.");
+                    ex.printStackTrace();
+                }
             } else {
                 System.out.println("Los PINs no coinciden.");
             }
@@ -199,4 +217,17 @@ public class App {
             System.out.println("PIN incorrecto.");
         }
     }
+
+    public static void actualizarPIN(Connection connection, int nuevoPin) throws SQLException {
+        String query = "UPDATE usuarios SET pin = ? WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, nuevoPin);
+            preparedStatement.setInt(2, usuarioId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Error al actualizar el PIN.");
+            ex.printStackTrace();
+        }
+    }
+    
 }
