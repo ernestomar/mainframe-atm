@@ -98,7 +98,7 @@ public class App {
 
             switch (opcion) {
                 case 1:
-                    consultarSaldo();
+                    consultarSaldo(connection);
                     break;
                 case 2:
                     realizarDeposito(connection);
@@ -107,7 +107,7 @@ public class App {
                     realizarRetiro(connection);
                     break;
                 case 4:
-                    cambiarPIN();
+                    cambiarPIN(connection);
                     break;
                 case 5:
                     System.out.println("Gracias por usar el cajero. ¡Hasta luego!");
@@ -119,8 +119,29 @@ public class App {
         }
     }
 
-    public static void consultarSaldo() {
-        System.out.println("Su saldo actual es: $" + saldo);
+    public static void consultarSaldo(Connection connection) {
+        //System.out.println("Su saldo actual es: $" + saldo);
+        String query = "SELECT saldo FROM usuarios WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, usuarioId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+                
+            if (resultSet.next()) {
+                saldo = resultSet.getDouble("saldo");
+
+                String updateQueryHist = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, 'consultaSaldo', ?)"; // Cambia esto según tu tabla
+                PreparedStatement preparedStatementHist = connection.prepareStatement(updateQueryHist);
+                preparedStatementHist.setInt(1, usuarioId);
+                preparedStatementHist.setDouble(2, saldo);
+                preparedStatementHist.executeUpdate();
+
+                System.out.println("Su saldo actual es: $" + saldo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void realizarDeposito(Connection connection) {
@@ -200,8 +221,8 @@ public class App {
             System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + saldo);
         }*/
     }
-
-    public static void cambiarPIN() {
+    
+    public static void cambiarPIN(Connection connection) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese su PIN actual: ");
         int pinIngresado = scanner.nextInt();
@@ -213,8 +234,29 @@ public class App {
             int confirmacionPin = scanner.nextInt();
 
             if (nuevoPin == confirmacionPin) {
-                pinActual = nuevoPin;
-                System.out.println("PIN actualizado con éxito.");
+                //pinActual = nuevoPin;
+                //System.out.println("PIN actualizado con éxito.");
+                try {
+                    String updateQuery = "UPDATE usuarios SET pin = ? WHERE id = ?"; // Cambia esto según tu tabla
+                    PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
+                    preparedStatement.setInt(1, nuevoPin);
+                    preparedStatement.setInt(2, usuarioId); // Cambia el valor según el ID de la cuenta
+    
+                    String updateQueryHist = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, 'cambioPin', ?)"; // Cambia esto según tu tabla
+                    PreparedStatement preparedStatementHist = connection.prepareStatement(updateQueryHist);
+                    preparedStatementHist.setInt(1, usuarioId);
+                    preparedStatementHist.setInt(2, nuevoPin);
+                    int rowsAffected = preparedStatement.executeUpdate();
+                    int rowsHist = preparedStatementHist.executeUpdate();
+                    if (rowsAffected + rowsHist > 0) {
+                        pinActual=nuevoPin;
+                        System.out.println("Cambio de pin realizado con éxito. Su pin ha sido actualizado.");
+                    } else {
+                        System.out.println("No se pudo realizar el cambio de pin.");
+                    }
+                } catch (SQLException e) {
+                    System.out.println("Error al realizar el cambio de pin: " + e.getMessage());
+                }
             } else {
                 System.out.println("Los PINs no coinciden.");
             }
