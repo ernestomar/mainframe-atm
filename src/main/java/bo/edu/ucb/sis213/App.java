@@ -52,7 +52,7 @@ public class App {
             int pinIngresado = scanner.nextInt();
             if (validarPIN(connection, pinIngresado)) {
                 pinActual = pinIngresado;
-                mostrarMenu();
+                mostrarMenu(connection);
                 break;
             } else {
                 intentos--;
@@ -84,7 +84,7 @@ public class App {
         return false;
     }
 
-    public static void mostrarMenu() {
+    public static void mostrarMenu(Connection connection) {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("\nMenú Principal:");
@@ -101,10 +101,10 @@ public class App {
                     consultarSaldo();
                     break;
                 case 2:
-                    realizarDeposito();
+                    realizarDeposito(connection);
                     break;
                 case 3:
-                    realizarRetiro();
+                    realizarRetiro(connection);
                     break;
                 case 4:
                     cambiarPIN();
@@ -123,32 +123,82 @@ public class App {
         System.out.println("Su saldo actual es: $" + saldo);
     }
 
-    public static void realizarDeposito() {
+    public static void realizarDeposito(Connection connection) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese la cantidad a depositar: $");
         double cantidad = scanner.nextDouble();
-
         if (cantidad <= 0) {
+            System.out.println("Cantidad no válida.");
+        } else {
+            try {
+                String updateQuery = "UPDATE usuarios SET saldo = saldo + ? WHERE id = ?"; // Cambia esto según tu tabla
+                PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
+                preparedStatement.setDouble(1, cantidad);
+                preparedStatement.setInt(2, usuarioId); // Cambia el valor según el ID de la cuenta
+
+                String updateQueryHist = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, 'deposito', ?)"; // Cambia esto según tu tabla
+                PreparedStatement preparedStatementHist = connection.prepareStatement(updateQueryHist);
+                preparedStatementHist.setInt(1, usuarioId);
+                preparedStatementHist.setDouble(2, cantidad);
+                int rowsAffected = preparedStatement.executeUpdate();
+                int rowsHist = preparedStatementHist.executeUpdate();
+                if (rowsAffected + rowsHist > 0) {
+                    saldo += cantidad;
+                    System.out.println("Depósito realizado con éxito. Su nuevo saldo es: $" + saldo);
+                } else {
+                    System.out.println("No se pudo realizar el depósito.");
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al realizar el depósito: " + e.getMessage());
+            }
+        }
+        /*if (cantidad <= 0) {
             System.out.println("Cantidad no válida.");
         } else {
             saldo += cantidad;
             System.out.println("Depósito realizado con éxito. Su nuevo saldo es: $" + saldo);
-        }
+        }*/
     }
 
-    public static void realizarRetiro() {
+    public static void realizarRetiro(Connection connection) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese la cantidad a retirar: $");
         double cantidad = scanner.nextDouble();
-
         if (cantidad <= 0) {
+            System.out.println("Cantidad no válida.");
+        } else if (cantidad > saldo) {
+            System.out.println("Saldo insuficiente.");
+        } else {
+            try {
+                String updateQuery = "UPDATE usuarios SET saldo = saldo - ? WHERE id = ?"; // Cambia esto según tu tabla
+                PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
+                preparedStatement.setDouble(1, cantidad);
+                preparedStatement.setInt(2, usuarioId); // Cambia el valor según el ID de la cuenta
+
+                String updateQueryHist = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, 'retiro', ?)"; // Cambia esto según tu tabla
+                PreparedStatement preparedStatementHist = connection.prepareStatement(updateQueryHist);
+                preparedStatementHist.setInt(1, usuarioId);
+                preparedStatementHist.setDouble(2, cantidad);
+                int rowsAffected = preparedStatement.executeUpdate();
+                int rowsHist = preparedStatementHist.executeUpdate();
+                if (rowsAffected + rowsHist > 0) {
+                    saldo -= cantidad;
+                    System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + saldo);
+                } else {
+                    System.out.println("No se pudo realizar el retiro.");
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al realizar el retiro: " + e.getMessage());
+            }
+        }
+        /*if (cantidad <= 0) {
             System.out.println("Cantidad no válida.");
         } else if (cantidad > saldo) {
             System.out.println("Saldo insuficiente.");
         } else {
             saldo -= cantidad;
             System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + saldo);
-        }
+        }*/
     }
 
     public static void cambiarPIN() {
