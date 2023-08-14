@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class App {
-    private static int usuarioId;
+    // private static int usuarioId;
     private static double saldo;
     private static int pinActual;
 
@@ -64,6 +64,7 @@ public class App {
                 }
             }
         }
+        scanner.clse();
     }
 
     public static boolean validarPIN(Connection connection, int pin) {
@@ -117,6 +118,7 @@ public class App {
                     System.out.println("Opción no válida. Intente nuevamente.");
             }
         }
+        in.close();
     }
 
     public static void consultarSaldo() {
@@ -133,7 +135,26 @@ public class App {
         } else {
             saldo += cantidad;
             System.out.println("Depósito realizado con éxito. Su nuevo saldo es: $" + saldo);
+            // Actualizacion en la BDD
+            String updateQuery = "UPDATE usuarios SET saldo = ? WHERE id = ?";//Para usuarios
+            String insertQuery = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, ?, ?)";// Para historico
+            try{
+                // TABLA usuarios
+                PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
+                updateStatement.setDouble(1,saldo);
+                updateStatement.setInt(2, usuarioId);
+                updateStatement.excecuteUpdate();
+                // TABLA historico 
+                PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
+                insertStatement.setInt(1, usuarioId);
+                insertStatement.setString(2, "Depósito");
+                insertStatement.setDouble(3, cantidad);
+                insertStatement.executeUpdate();
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
         }
+        scanner.close();
     }
 
     public static void realizarRetiro() {
@@ -149,6 +170,24 @@ public class App {
             saldo -= cantidad;
             System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + saldo);
         }
+        String updateQuery = "UPDATE usuarios SET saldo = ? WHERE id = ?";//Para usuarios
+        String insertQuery = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, ?, ?)";// Para historico
+        try{
+            // TABLA usuarios
+            PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
+            updateStatement.setDouble(1,saldo);
+            updateStatement.setInt(2, usuarioId);
+            updateStatement.excecuteUpdate();
+            // TABLA historico 
+            PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
+            insertStatement.setInt(1, usuarioId);
+            insertStatement.setString(2, "Retiro");
+            insertStatement.setDouble(3, cantidad);
+            insertStatement.executeUpdate();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        scanner.close();
     }
 
     public static void cambiarPIN() {
@@ -165,11 +204,23 @@ public class App {
             if (nuevoPin == confirmacionPin) {
                 pinActual = nuevoPin;
                 System.out.println("PIN actualizado con éxito.");
+
+                // Actualizacion del PIN en la BDD
+                String updateQuery = "UPDATE usuarios SET pin = ? WHERE id = ?";
+                try {
+                    PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
+                    updateStatement.setInt(1, nuevoPin);
+                    updateStatement.setInt(2, usuarioId);
+                    updateStatement.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             } else {
                 System.out.println("Los PINs no coinciden.");
             }
         } else {
             System.out.println("PIN incorrecto.");
         }
+        scanner.close();
     }
 }
