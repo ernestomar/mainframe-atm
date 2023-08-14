@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package bo.edu.ucb.sis213;
 
 import java.util.Scanner;
@@ -173,3 +174,5 @@ public class App {
         }
     }
 }
+=======
+>>>>>>> 63b0093 (Guardando cambios locales antes de hacer el pull)
