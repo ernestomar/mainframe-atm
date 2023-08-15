@@ -1,5 +1,8 @@
 package bo.edu.ucb.sis213;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.Scanner;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -53,15 +56,17 @@ public class App {
             int pinIngresado = scanner.nextInt();
             if (validarPIN(connection, pinIngresado)) {
                 pinActual = pinIngresado;
-                System.out.println("Bienvenid@ "+nombreUser+" !!!!! ");
+                System.out.println("Bienvenid@ "+nombreUser+" 😀!!!!! ");
                 mostrarMenu(connection);
                 break;
             } else {
                 intentos--;
-                if (intentos > 0) {
-                    System.out.println("PIN incorrecto. Le quedan " + intentos + " intentos.");
+                if (intentos > 1) {
+                    System.out.println("PIN incorrecto. Le quedan " + intentos + " intentos. 🙂");
+                } else if (intentos == 1) {
+                    System.out.println("PIN incorrecto. Le queda " + intentos + " intento. 😐");
                 } else {
-                    System.out.println("PIN incorrecto. Ha excedido el número de intentos.");
+                    System.out.println("PIN incorrecto. Ha excedido el número de intentos. ☹");
                     System.exit(0);
                 }
             }
