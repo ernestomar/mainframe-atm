@@ -8,9 +8,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class App {
-    // private static int usuarioId;
+    private static int usuarioId;
     private static double saldo;
-    private static int pinActual;
+    private static int passwordActual;
+    private static String usernameActual;
 
     private static final String HOST = "127.0.0.1";
     private static final int PORT = 3306;
@@ -48,35 +49,39 @@ public class App {
         
 
         while (intentos > 0) {
-            System.out.print("Ingrese su PIN de 4 dígitos: ");
-            int pinIngresado = scanner.nextInt();
-            if (validarPIN(connection, pinIngresado)) {
-                pinActual = pinIngresado;
+            System.out.println("Ingrese su nombre de usuario: ");
+            String usernameIngresado = scanner.next();
+            System.out.print("Ingrese su contraseña: ");
+            String passwordIngresadoo = scanner.nextInt();
+            if (validarUsuario(connection, passwordIngresadoo, usernameIngresado)) {
+                passwordActual = passwordIngresadoo;
                 mostrarMenu();
                 break;
             } else {
                 intentos--;
                 if (intentos > 0) {
-                    System.out.println("PIN incorrecto. Le quedan " + intentos + " intentos.");
+                    System.out.println("El nombre de usuario y la contraseña no coinciden. Le quedan " + intentos + " intentos.");
                 } else {
-                    System.out.println("PIN incorrecto. Ha excedido el número de intentos.");
+                    System.out.println("Nombre de usuario o contraseña incorrectos. Ha excedido el número de intentos.");
                     System.exit(0);
                 }
             }
         }
-        scanner.clse();
+        scanner.close();
     }
 
-    public static boolean validarPIN(Connection connection, int pin) {
-        String query = "SELECT id, saldo FROM usuarios WHERE pin = ?";
+    public static boolean validarUsuario(Connection connection, String password,  String username) {
+        String query = "SELECT id, saldo, alias FROM usuarios WHERE username = ? AND passw = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, pin);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
                 usuarioId = resultSet.getInt("id");
                 saldo = resultSet.getDouble("saldo");
+                usernameActual = resultSet.getString("alias");
                 return true;
             }
         } catch (Exception e) {
@@ -85,6 +90,7 @@ public class App {
         return false;
     }
 
+
     public static void mostrarMenu() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -92,7 +98,7 @@ public class App {
             System.out.println("1. Consultar saldo.");
             System.out.println("2. Realizar un depósito.");
             System.out.println("3. Realizar un retiro.");
-            System.out.println("4. Cambiar PIN.");
+            System.out.println("4. Cambiar contraseña.");
             System.out.println("5. Salir.");
             System.out.print("Seleccione una opción: ");
             int opcion = scanner.nextInt();
@@ -108,7 +114,7 @@ public class App {
                     realizarRetiro();
                     break;
                 case 4:
-                    cambiarPIN();
+                    cambiarPassword();
                     break;
                 case 5:
                     System.out.println("Gracias por usar el cajero. ¡Hasta luego!");
@@ -190,36 +196,35 @@ public class App {
         scanner.close();
     }
 
-    public static void cambiarPIN() {
+    public static void cambiarPassword() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingrese su PIN actual: ");
-        int pinIngresado = scanner.nextInt();
+        System.out.print("Ingrese su contraseña actual: ");
+        int passwordIngresado = scanner.nextInt();
 
-        if (pinIngresado == pinActual) {
-            System.out.print("Ingrese su nuevo PIN: ");
-            int nuevoPin = scanner.nextInt();
-            System.out.print("Confirme su nuevo PIN: ");
-            int confirmacionPin = scanner.nextInt();
-
-            if (nuevoPin == confirmacionPin) {
-                pinActual = nuevoPin;
-                System.out.println("PIN actualizado con éxito.");
-
+        if (passwordIngresado == passwordActual) {
+            System.out.print("Ingrese su nueva contraseña: ");
+            int nuevoPassword = scanner.nextInt();
+            System.out.print("Confirme su nueva contraseña: ");
+            int confirmacionPassword = scanner.nextInt();
+            if (nuevoPassword == confirmacionPassword) {
+                passwordActual = nuevoPassword;
+                System.out.println("Contraseña actualizada con éxito.");
                 // Actualizacion del PIN en la BDD
-                String updateQuery = "UPDATE usuarios SET pin = ? WHERE id = ?";
+                String updateQuery = "UPDATE usuarios SET passw = ? WHERE id = ?";
                 try {
                     PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
-                    updateStatement.setInt(1, nuevoPin);
+                    updateStatement.setInt(1, nuevoPassword);
                     updateStatement.setInt(2, usuarioId);
                     updateStatement.executeUpdate();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+
             } else {
-                System.out.println("Los PINs no coinciden.");
+                System.out.println("Las contraseñas introducidas no coinciden.");
             }
         } else {
-            System.out.println("PIN incorrecto.");
+            System.out.println("Contraseña incorrecta.");
         }
         scanner.close();
     }
