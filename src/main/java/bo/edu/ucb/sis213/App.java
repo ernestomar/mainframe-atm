@@ -6,11 +6,52 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import bo.edu.ucb.sis213.ValidacionUsuario;
+import bo.edu.ucb.sis213.MovimientosBancarios;
+import bo.edu.ucb.sis213.CambiosCuenta;
+
+
 public class App {
-    private static int usuarioId;
-    private static double saldo;
-    private static String passwordActual;
-    private static String usernameActual;
+
+     private static int usuarioId;
+     private static double saldo;
+     private static String passwordActual;
+     private static String usernameActual;
+     
+     public static int getUsuarioId() {
+        return usuarioId;
+    }
+
+    public static double getSaldo() {
+        return saldo;
+    }
+
+    public static String getPasswordActual() {
+        return passwordActual;
+    }
+
+    public static String getUsernameActual() {
+        return usernameActual;
+    }
+
+    // Setters
+    public static void setUsuarioId(int usuarioId) {
+        App.usuarioId = usuarioId;
+    }
+
+    public static void setSaldo(double saldo) {
+        App.saldo = saldo;
+    }
+
+    public static void setPasswordActual(String passwordActual) {
+        App.passwordActual = passwordActual;
+    }
+
+    public static void setUsernameActual(String usernameActual) {
+        App.usernameActual = usernameActual;
+    }
+
+
 
     private static final String HOST = "127.0.0.1";
     private static final int PORT = 3306;
@@ -36,7 +77,6 @@ public class App {
         int intentos = 3;
 
         System.out.println("Bienvenido al Cajero Automático.");
-
         Connection connection = null;
         try {
             connection = getConnection(); // Reemplaza esto con tu conexión real
@@ -52,7 +92,7 @@ public class App {
             String usernameIngresado = scanner.next();
             System.out.print("Ingrese su contraseña: ");
             String passwordIngresado = scanner.next();
-            if (validarUsuario(connection, passwordIngresado, usernameIngresado)) {
+            if (ValidacionUsuario.validarUsuario(connection, passwordIngresado, usernameIngresado)) {
                 passwordActual = passwordIngresado;
                 mostrarMenu(connection);
                 break;
@@ -66,28 +106,8 @@ public class App {
                 }
             }
         }
+        scanner.close();
     }
-
-    public static boolean validarUsuario(Connection connection, String password,  String username) {
-        String query = "SELECT id, saldo, alias FROM usuarios WHERE alias = ? AND passw = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, username);
-            preparedStatement.setString(2, password);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                usuarioId = resultSet.getInt("id");
-                saldo = resultSet.getDouble("saldo");
-                usernameActual = resultSet.getString("alias");
-                return true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
 
     public static void mostrarMenu(Connection connection) {
         Scanner scanner = new Scanner(System.in);
@@ -106,16 +126,17 @@ public class App {
                     consultarSaldo();
                     break;
                 case 2:
-                    realizarDeposito(connection);
+                    MovimientosBancarios.realizarDeposito(connection);
                     break;
                 case 3:
-                    realizarRetiro(connection);
+                    MovimientosBancarios.realizarRetiro(connection);;
                     break;
                 case 4:
-                    cambiarPassword(connection);
+                    CambiosCuenta.cambiarPassword(connection);
                     break;
                 case 5:
                     System.out.println("Gracias por usar el cajero. ¡Hasta luego!");
+                    scanner.close();
                     System.exit(0);
                     break;
                 default:
@@ -126,103 +147,5 @@ public class App {
 
     public static void consultarSaldo() {
         System.out.println("Su saldo actual es: $" + saldo);
-    }
-
-    public static void realizarDeposito(Connection connection) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingrese la cantidad a depositar: $");
-        double cantidad = scanner.nextDouble();
-
-        if (cantidad <= 0) {
-            System.out.println("Cantidad no válida.");
-        } else {
-            saldo += cantidad;
-            System.out.println("Depósito realizado con éxito. Su nuevo saldo es: $" + saldo);
-            // Actualizacion en la BDD
-            String updateQuery = "UPDATE usuarios SET saldo = ? WHERE id = ?";//Para usuarios
-            String insertQuery = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, ?, ?)";// Para historico
-            try{
-                // TABLA usuarios
-                PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
-                updateStatement.setDouble(1,saldo);
-                updateStatement.setInt(2, usuarioId);
-                updateStatement.executeUpdate();
-                // TABLA historico 
-                PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
-                insertStatement.setInt(1, usuarioId);
-                insertStatement.setString(2, "deposito");
-                insertStatement.setDouble(3, cantidad);
-                insertStatement.executeUpdate();
-            }catch(SQLException e){
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static void realizarRetiro(Connection connection) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingrese la cantidad a retirar: $");
-        double cantidad = scanner.nextDouble();
-
-        if (cantidad <= 0) {
-            System.out.println("Cantidad no válida.");
-        } else if (cantidad > saldo) {
-            System.out.println("Saldo insuficiente.");
-        } else {
-            saldo -= cantidad;
-            System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + saldo);
-        }
-        String updateQuery = "UPDATE usuarios SET saldo = ? WHERE id = ?";//Para usuarios
-        String insertQuery = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, ?, ?)";// Para historico
-        try{
-            // TABLA usuarios
-            PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
-            updateStatement.setDouble(1,saldo);
-            updateStatement.setInt(2, usuarioId);
-            updateStatement.executeUpdate();
-            // TABLA historico 
-            PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
-            insertStatement.setInt(1, usuarioId);
-            insertStatement.setString(2, "retiro");
-            insertStatement.setDouble(3, cantidad);
-            insertStatement.executeUpdate();
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-
-    }
-
-    public static void cambiarPassword(Connection connection) {
-        Scanner scanner = new Scanner(System.in);
-        // System.out.println("PRUEBAS: Password actual: "+passwordActual);
-        System.out.print("Ingrese su contraseña actual: ");
-        String passwordIngresado = scanner.next();
-        // Ingreso de nueva password
-        if (passwordIngresado.equals(passwordActual)) {
-            System.out.print("Ingrese su nueva contraseña: ");
-            String nuevoPassword = scanner.next();
-            System.out.print("Confirme su nueva contraseña: ");
-            String confirmacionPassword = scanner.next();
-
-            if (nuevoPassword.equals(confirmacionPassword)) {
-                passwordActual = nuevoPassword;
-                System.out.println("Contraseña actualizada con éxito.");
-                // Actualizacion del PIN en la BDD
-                String updateQuery = "UPDATE usuarios SET passw = ? WHERE id = ?";
-                try {
-                    PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
-                    updateStatement.setString(1, nuevoPassword);
-                    updateStatement.setInt(2, usuarioId);
-                    updateStatement.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
-            } else {
-                System.out.println("Las contraseñas introducidas no coinciden.");
-            }
-        } else {
-            System.out.println("Contraseña incorrecta.");
-        }
     }
 }   
