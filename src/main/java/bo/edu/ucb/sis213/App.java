@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import bo.edu.ucb.sis213.ValidacionUsuario;
 import bo.edu.ucb.sis213.MovimientosBancarios;
 import bo.edu.ucb.sis213.CambiosCuenta;
-
+import bo.edu.ucb.sis213.ConexionBDD;
 
 public class App {
 
@@ -51,27 +51,6 @@ public class App {
         App.usernameActual = usernameActual;
     }
 
-
-
-    private static final String HOST = "127.0.0.1";
-    private static final int PORT = 3306;
-    private static final String USER = "root";
-    private static final String PASSWORD = "123456";
-    private static final String DATABASE = "atm";
-
-    public static Connection getConnection() throws SQLException {
-        String jdbcUrl = String.format("jdbc:mysql://%s:%d/%s", HOST, PORT, DATABASE);
-        try {
-            // Asegúrate de tener el driver de MySQL agregado en tu proyecto
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw new SQLException("MySQL Driver not found.", e);
-        }
-
-        return DriverManager.getConnection(jdbcUrl, USER, PASSWORD);
-    }
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int intentos = 3;
@@ -79,7 +58,7 @@ public class App {
         System.out.println("Bienvenido al Cajero Automático.");
         Connection connection = null;
         try {
-            connection = getConnection(); // Reemplaza esto con tu conexión real
+            connection = ConexionBDD.getConnection();
         } catch (SQLException ex) {
             System.err.println("No se puede conectar a Base de Datos");
             ex.printStackTrace();
@@ -120,10 +99,9 @@ public class App {
             System.out.println("5. Salir.");
             System.out.print("Seleccione una opción: ");
             int opcion = scanner.nextInt();
-
             switch (opcion) {
                 case 1:
-                    consultarSaldo();
+                    MovimientosBancarios.consultarSaldo();
                     break;
                 case 2:
                     MovimientosBancarios.realizarDeposito(connection);
@@ -145,7 +123,4 @@ public class App {
         }
     }
 
-    public static void consultarSaldo() {
-        System.out.println("Su saldo actual es: $" + saldo);
-    }
 }   

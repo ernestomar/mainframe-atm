@@ -41,7 +41,7 @@ public class MovimientosBancarios{
                 e.printStackTrace();
             }
         }
-        scanner.close();
+        // scanner.close();
 
     }
 
@@ -78,6 +78,10 @@ public class MovimientosBancarios{
         }catch(SQLException e){
             e.printStackTrace();
         }
-        scanner.close();
+        // scanner.close();
+    }
+
+    public static void consultarSaldo() {
+        System.out.println("Su saldo actual es: $" + App.getSaldo());
     }
 }
