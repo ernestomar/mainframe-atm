@@ -4,6 +4,7 @@ import bo.edu.ucb.sis213.Model.BackModel;
 import bo.edu.ucb.sis213.View.LoginView;
 import bo.edu.ucb.sis213.View.MenuView;
 import bo.edu.ucb.sis213.View.RetiroView;
+import bo.edu.ucb.sis213.View.CambiarPinView;
 import bo.edu.ucb.sis213.View.ConsultaView;
 import bo.edu.ucb.sis213.View.DepositoView;
 
@@ -35,5 +36,7 @@ public class App {
     public void mostrarRetiroView() {
         RetiroView retiroView = new RetiroView(connection); // Pasa el controlador a la vista
     }
-
+    public void mostrarCambioPINView() {
+        CambiarPinView pinView = new CambiarPinView(connection); // Pasa el controlador a la vista
+    }
 }

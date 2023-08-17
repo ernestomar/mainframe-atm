@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 public class BackModel {
     private static int usuarioId;
     private double saldo;
@@ -111,31 +113,13 @@ public class BackModel {
         }
     }   
 
-
-
-    // public void realizarDeposito(double amount) throws SQLException {
-    //     double nuevoSaldo = saldo + amount;
-    //     String updateQuery = "UPDATE usuarios SET saldo = ? WHERE id = ?";
-    //     try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
-    //         preparedStatement.setDouble(1, nuevoSaldo);
-    //         preparedStatement.setInt(2, usuarioId);
-    //         preparedStatement.executeUpdate();
-    //         saldo = nuevoSaldo;
-    //         registrarOperacion("Depósito", amount);
-    //     } catch (SQLException ex) {
-    //         ex.printStackTrace();
-    //         throw ex;
-    //     }
-    // }
-
     public void cambiarPIN(int currentPIN, int newPIN, int confirmPIN) throws SQLException {
-        if (currentPIN == pinActual && newPIN == confirmPIN) {
+        if (currentPIN == getPinActual() && newPIN == confirmPIN) {
             String updateQuery = "UPDATE usuarios SET pin = ? WHERE id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
                 preparedStatement.setInt(1, newPIN);
                 preparedStatement.setInt(2, usuarioId);
                 preparedStatement.executeUpdate();
-                pinActual = newPIN;
                 registrarOperacion("Cambio de PIN", 0.0);
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -143,6 +127,7 @@ public class BackModel {
             }
         } else {
             throw new SQLException("PIN actual incorrecto o los nuevos PIN no coinciden.");
+            // JOptionPane.showMessageDialog(frame, "Los PINS no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -197,7 +182,19 @@ public class BackModel {
 
 
     public int getPinActual() {
-        return pinActual;
+        String query = "SELECT pin FROM usuarios WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, usuarioId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt("pin");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0; 
     }
 
     public int getIntentosRestantes() {
