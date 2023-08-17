@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 import bo.edu.ucb.sis213.Model.BackModel;
 import bo.edu.ucb.sis213.View.LoginView;
@@ -22,8 +23,9 @@ public class MenuView {
     
     private BackModel model;
 
-    public MenuView(App controller, String username) {
-        this.controller = controller;
+    public MenuView(Connection connection, String username) {
+        this.controller = new App(connection);
+        this.model = new BackModel(connection);
         frame = new JFrame("ATM App - Menú Principal");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300, 300);
@@ -49,12 +51,13 @@ public class MenuView {
             }
         });
 
-        // depositButton.addActionListener(new ActionListener() {
-        //     @Override
-        //     public void actionPerformed(ActionEvent e) {
-        //         DepositoView depositoView = new DepositoView();
-        //     }
-        // });
+        depositButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // DepositoView depositoView = new DepositoView();
+                controller.mostrarDepositoView();
+            }
+        });
         
 
         // Para simplificar, solo agregaremos una acción al botón de salir

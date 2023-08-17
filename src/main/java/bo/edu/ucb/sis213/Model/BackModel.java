@@ -16,6 +16,7 @@ public class BackModel {
     public BackModel(Connection connection) {
         this.connection = connection;
         intentosRestantes = 3;
+        saldo=getSaldo();
     }
     
     // Dentro de la clase BackModel
@@ -43,19 +44,23 @@ public class BackModel {
     }
 
     public void realizarDeposito(double cantidad) {
+        System.out.println("Esta entrando TT");//joption4
         if (cantidad <= 0) {
             System.out.println("Cantidad no válida.");//joption4
             return;
         }
 
         saldo += cantidad;
+        System.out.println("\nDepósito==" + saldo);//joption5
         try {
             actualizarSaldo(connection, saldo);
             registrarOperacion(connection, "Deposito", cantidad);
             System.out.println("\nDepósito realizado con éxito. Su nuevo saldo es: $" + saldo);//joption5
+            // return true;
         } catch (SQLException ex) {
             ex.printStackTrace();
             System.out.println("\nError al realizar el depósito.");//joption6
+            // return false;
         }
     }
 

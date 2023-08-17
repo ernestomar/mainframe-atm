@@ -8,6 +8,7 @@ import bo.edu.ucb.sis213.Model.BackModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 public class DepositoView {
     private JFrame frame;
@@ -19,8 +20,10 @@ public class DepositoView {
     private BackModel model;
     private App controller;
 
-    public DepositoView() {
+    public DepositoView(Connection connection) {
         frame = new JFrame("Depósito");
+        this.controller = new App(connection);
+        this.model = new BackModel(connection);
         frame.setSize(300, 150);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
@@ -42,15 +45,24 @@ public class DepositoView {
         frame.add(buttonPanel, BorderLayout.SOUTH);
 
         // Acción para el botón Aceptar
-        // aceptarButton.addActionListener(new ActionListener() {
-        //     @Override
-        //     public void actionPerformed(ActionEvent e) {
-        //         String cantidadStr = cantidadField.getText();
-        //         double cantidad = Double.parseDouble(cantidadStr);
-        //         controller.realizarDeposito(cantidad); // Llama al método en el controlador
-        //         frame.dispose();
-        //     }
-        // });
+        aceptarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String cantidadStr = cantidadField.getText();
+                double cantidad = Double.parseDouble(cantidadStr);
+
+                try {
+                    System.out.println("cant: "+cantidad);
+                    model.realizarDeposito(cantidad);
+                    // controller.realizarDeposito(cantidad);
+                //  controller.realizarDeposito(cantidad); // Llama al método en el controlador   
+                } catch (Exception ex) {
+                    System.out.println("Error Susana TT");
+                    ex.printStackTrace();
+                }
+                frame.dispose();
+            }
+        });
         
 
         // Acción para el botón Cancelar
