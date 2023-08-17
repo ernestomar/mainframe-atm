@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class App {
+public class ex {
     private static int usuarioId;
     private static double saldo;
     private static int pinActual;
@@ -158,7 +158,7 @@ public class App {
             saldo += cantidad;
             try {
                 actualizarSaldo(connection, saldo); 
-                registrarOperacion(connection, "Depo1sito", cantidad);
+                registrarOperacion(connection, "Deposito", cantidad);
                 System.out.println("\nDepósito realizado con éxito. Su nuevo saldo es: $" + saldo);
             } catch (SQLException ex) {
                 System.out.println("\nError al realizar el depósito.");
