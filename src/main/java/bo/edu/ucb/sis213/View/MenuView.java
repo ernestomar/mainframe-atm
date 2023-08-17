@@ -59,6 +59,13 @@ public class MenuView {
             }
         });
         
+        withdrawButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // DepositoView depositoView = new DepositoView();
+                controller.mostrarRetiroView();
+            }
+        });
 
         // Para simplificar, solo agregaremos una acción al botón de salir
         exitButton.addActionListener(new ActionListener() {

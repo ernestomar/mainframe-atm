@@ -64,6 +64,28 @@ public class BackModel {
         }
     }
 
+    public void realizarRetiro(double cantidad) {
+        System.out.println("Esta entrando a retiro TT");//joption4
+        if (cantidad <= 0) {
+            System.out.println("Cantidad no válida.");//joption5
+            return;
+        }else if(cantidad>saldo){
+            System.out.println("Saldo insuficiente.");//joption5
+        }else{
+            saldo -= cantidad;
+            System.out.println("\nDepósito==" + saldo);//joption5
+            try {
+                actualizarSaldo(connection, saldo); 
+                registrarOperacion(connection, "Retiro", -cantidad); 
+                System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + saldo);
+            } catch (SQLException ex) {
+                System.out.println("Error al realizar el retiro.");
+                ex.printStackTrace();
+            }
+        }
+        
+    }
+
     public static void actualizarSaldo(Connection connection, double nuevoSaldo) throws SQLException {
         String query = "UPDATE usuarios SET saldo = ? WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
