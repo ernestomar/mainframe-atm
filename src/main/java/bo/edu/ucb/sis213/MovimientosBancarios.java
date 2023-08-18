@@ -3,25 +3,27 @@ package bo.edu.ucb.sis213;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Scanner;
-import bo.edu.ucb.sis213.App;
+
+// import java.util.Scanner;
+import javax.swing.JOptionPane;
+// import bo.edu.ucb.sis213.App;
 
 
 public class MovimientosBancarios{
-    public static void realizarDeposito(Connection connection) {
+    public static void realizarDeposito(Connection connection,double cantidad) {
 
         int usuarioId = App.getUsuarioId();
         double saldo = App.getSaldo();
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingrese la cantidad a depositar: $");
-        double cantidad = scanner.nextDouble();
+        // Scanner scanner = new Scanner(System.in);
+        // System.out.print("Ingrese la cantidad a depositar: $");
+        // double cantidad = scanner.nextDouble();
 
         if (cantidad <= 0) {
-            System.out.println("Cantidad no válida.");
+            JOptionPane.showMessageDialog(null,"Cantidad no válida.");
         } else {
             App.setSaldo(saldo + cantidad);
-            System.out.println("Depósito realizado con éxito. Su nuevo saldo es: $" + App.getSaldo());
+            JOptionPane.showMessageDialog(null,"Depósito realizado con éxito. Su nuevo saldo es: $" + App.getSaldo());
             // Actualizacion en la BDD
             String updateQuery = "UPDATE usuarios SET saldo = ? WHERE id = ?";//Para usuarios
             String insertQuery = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, ?, ?)";// Para historico
@@ -45,21 +47,21 @@ public class MovimientosBancarios{
 
     }
 
-    public static void realizarRetiro(Connection connection) {
+    public static void realizarRetiro(Connection connection, double cantidad) {
 
         int usuarioId = App.getUsuarioId();
         double saldo = App.getSaldo();
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingrese la cantidad a retirar: $");
-        double cantidad = scanner.nextDouble();
+        // Scanner scanner = new Scanner(System.in);
+        // System.out.print("Ingrese la cantidad a retirar: $");
+        // double cantidad = scanner.nextDouble();
         if (cantidad <= 0) {
-            System.out.println("Cantidad no válida.");
+            JOptionPane.showMessageDialog(null,"Cantidad no válida.");
         } else if (cantidad > saldo) {
-            System.out.println("Saldo insuficiente.");
+            JOptionPane.showMessageDialog(null,"Saldo insuficiente.");
         } else {
             App.setSaldo(saldo-cantidad);
-            System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + App.getSaldo());
+            JOptionPane.showMessageDialog(null,"Retiro realizado con éxito. Su nuevo saldo es: $" + App.getSaldo());
         }
         String updateQuery = "UPDATE usuarios SET saldo = ? WHERE id = ?";//Para usuarios
         String insertQuery = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, ?, ?)";// Para historico
@@ -82,6 +84,6 @@ public class MovimientosBancarios{
     }
 
     public static void consultarSaldo() {
-        System.out.println("Su saldo actual es: $" + App.getSaldo());
+        JOptionPane.showMessageDialog(null, "Su saldo actual es: $" + App.getSaldo());
     }
 }

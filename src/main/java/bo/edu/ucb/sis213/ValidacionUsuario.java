@@ -3,8 +3,8 @@ package bo.edu.ucb.sis213;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import bo.edu.ucb.sis213.App;
+// import java.sql.SQLException;
+// import bo.edu.ucb.sis213.App;
 
 
 public class ValidacionUsuario{

@@ -3,7 +3,7 @@ package bo.edu.ucb.sis213;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import bo.edu.ucb.sis213.App;
+// import bo.edu.ucb.sis213.App;
 
 public class ConexionBDD{
     private static final String HOST = "127.0.0.1";
