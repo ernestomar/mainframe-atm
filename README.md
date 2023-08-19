@@ -130,21 +130,21 @@ CLick derecho y darle en "Detener"
 # Capturas de pantalla finales:
 
 Bienvenida:
-![Bienvenda](/mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-03.png)
+![Bienvenda](mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-03.png)
 Interfaz inicial:
-![Bienvenda](/mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-10.png)
+![Bienvenda](mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-10.png)
 
 Consulta de saldo:
-![Bienvenda](/mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-15.png)
+![Bienvenda](mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-15.png)
 
 Realizando retiro:
-![Bienvenda](/mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-18.png)
+![Bienvenda](mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-18.png)
 
 Realizando deposito:
-![Bienvenda](/mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-22.png)
+![Bienvenda](mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-22.png)
 
 Cambio de PIN:
-![Bienvenda](/mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-26.png)
+![Bienvenda](mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-26.png)
 
 ---
 
@@ -153,13 +153,13 @@ Cambio de PIN:
 Link:https://www.figma.com/file/MbnVrPWFMKVBYlolxlxUoG/ATM-Interfaz-de-usuario?type=design&node-id=0%3A1&mode=design&t=JkVmRgid1BEL3XrT-1
 
 Bienvenida:
-![Bienvenda](/mainframe-atm/images_figma/BienvenidaBanco.png)
+![Bienvenda](mainframe-atm/images_figma/BienvenidaBanco.png)
 
 Interfaz iniciado sesion
-![Interfaz inicial](/mainframe-atm/images_figma/BienvenidaUsuario.png)
+![Interfaz inicial](mainframe-atm/images_figma/BienvenidaUsuario.png)
 Deposito de dinero
-![Deposito](/mainframe-atm/images_figma/RealizarDeposito.png)
+![Deposito](/ainframe-atm/images_figma/RealizarDeposito.png)
 Retiro de dinero
-![Retiro](/mainframe-atm/images_figma/RealizarRetiro.png)
+![Retiro](mainframe-atm/images_figma/RealizarRetiro.png)
 Cambio de pin:
-![Cambio de PIN](/mainframe-atm/images_figma/CambiarPIN1.png)
+![Cambio de PIN](mainframe-atm/images_figma/CambiarPIN1.png)
