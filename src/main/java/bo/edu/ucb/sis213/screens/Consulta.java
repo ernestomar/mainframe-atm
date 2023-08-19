@@ -1,9 +1,13 @@
 package bo.edu.ucb.sis213.screens;
 
+import bo.edu.ucb.sis213.GestorUsuario;
+import bo.edu.ucb.sis213.Usuario;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 public class Consulta {
 
@@ -13,18 +17,25 @@ public class Consulta {
     private JLabel balanceLabel;
     private JButton exitButton;
     private JButton anotherOperationButton;
+    private Connection connection;
+    private Usuario usuario;
+    private GestorUsuario gestorUsuario;
 
-    public Consulta(int userid) {
+    public Consulta(Connection connection, Usuario usuario, GestorUsuario gestorUsuario) {
+        this.connection = connection;
+        this.usuario = usuario;
+        this.gestorUsuario = gestorUsuario;
+
         frame = new JFrame("Consulta de Saldo");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 400);
 
-        initConsulta(userid);
+        initConsulta(connection, usuario, gestorUsuario);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    private void initConsulta(int userid) {
+    private void initConsulta(Connection connection, Usuario usuario, GestorUsuario gestorUsuario) {
         consultaPanel = new JPanel(new GridBagLayout());
         Color bckg = new Color(0x0C0E9B);
         Color letras = new Color(0xF1E30A);
@@ -43,7 +54,7 @@ public class Consulta {
         consultaPanel.add(nameLabel, constraints);
 
         // Simular un saldo cualquiera
-        balanceLabel = new JLabel("Saldo: $1000.00");
+        balanceLabel = new JLabel("Saldo: Bs"+usuario.getSaldo());
         balanceLabel.setForeground(letras);
         constraints.gridy = 1;
         consultaPanel.add(balanceLabel, constraints);
@@ -68,14 +79,14 @@ public class Consulta {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.dispose(); // Cerrar la ventana actual
+                System.exit(0);
             }
         });
 
         anotherOperationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Agregar lógica para manejar otra operación
+                frame.dispose();
             }
         });
 

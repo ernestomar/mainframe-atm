@@ -1,8 +1,15 @@
 package bo.edu.ucb.sis213.screens;
+import bo.edu.ucb.sis213.Conexion;
+import bo.edu.ucb.sis213.GestorUsuario;
+import bo.edu.ucb.sis213.Usuario;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Scanner;
 
 public class Login {
 
@@ -12,18 +19,18 @@ public class Login {
     private JPasswordField pinField;
     private JButton loginButton;
 
-    public Login() {
+    public Login(Connection connection) {
         frame = new JFrame("ATM Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 400);
 
-        initLoginScreen();
+        initLoginScreen(connection);
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    private void initLoginScreen() {
+    private void initLoginScreen(Connection connection) {
         loginPanel = new JPanel(new GridBagLayout());
         Color bckg = new Color(0x0C0E9B);
         Color letras = new Color(0xF1E30A);
@@ -84,27 +91,24 @@ public class Login {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String usuario = userField.getText();
-                char[] contrasenaChars = pinField.getPassword();
-                String contrasena = new String(contrasenaChars);
+                String username = userField.getText();
+                int contrasena = Integer.parseInt(new String(pinField.getPassword()));
 
-                // Aquí puedes hacer algo con los datos ingresados, como validarlos
-                // o iniciar sesión en tu aplicación.
-                System.out.println("Usuario: " + usuario);
+                System.out.println("Usuario: " + username);
                 System.out.println("Contraseña: " + contrasena);
-                new Menu(usuario);
+
+                GestorUsuario gestorUsuario = new GestorUsuario(connection);
+                Usuario usuario = new Usuario(connection, 0, 0, 0, null);
+                if (gestorUsuario.validarPIN(usuario, contrasena)) {
+                    System.out.println("Bienvenid@ " + usuario.getNombreUser() + " 😀!!!!! ");
+                    new Menu(connection, usuario, gestorUsuario);
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Contraseña incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+                    System.out.println("PIN incorrecto.");
+                }
             }
         });
 
         frame.add(loginPanel);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Login();
-            }
-        });
     }
 }

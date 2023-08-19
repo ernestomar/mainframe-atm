@@ -5,6 +5,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.sql.Connection;
+import bo.edu.ucb.sis213.GestorUsuario;
+import bo.edu.ucb.sis213.Usuario;
+
 public class CambioPin {
 
     private JFrame frame;
@@ -18,18 +22,25 @@ public class CambioPin {
     private JPasswordField confirmNewPasswordField;
     private JButton cancelButton;
     private JButton changeButton;
+    private Connection connection;
+    private Usuario usuario;
+    private GestorUsuario gestorUsuario;
 
-    public CambioPin(int userid) {
+    public CambioPin(Connection connection, Usuario usuario, GestorUsuario gestorUsuario) {
+        this.connection = connection;
+        this.usuario = usuario;
+        this.gestorUsuario = gestorUsuario;
+
         frame = new JFrame("Cambio de PIN");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 400);
 
-        initCambioPin(userid);
+        initCambioPin();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    private void initCambioPin(int userid) {
+    private void initCambioPin() {
         cambioPinPanel = new JPanel(new GridBagLayout());
         Color bckg = new Color(0x0C0E9B);
         Color letras = new Color(0xF1E30A);
@@ -112,8 +123,21 @@ public class CambioPin {
                 String confirmNewPassword = new String(confirmNewPasswordField.getPassword());
 
                 if (newPassword.equals(confirmNewPassword)) {
+                    if(currentPassword.equals(usuario.getPinActual())){
+                        int nuevoPin = Integer.parseInt(newPassword);
+                        boolean flag = gestorUsuario.cambiarPIN(usuario.getUsuarioId(),nuevoPin);
+                        if(flag){
+                            showSuccessScreen();
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(frame, "No se pudo cambiar la contraseña", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(frame, "Contraseña incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                     // Aquí puedes agregar la lógica para cambiar la contraseña
-                    showSuccessScreen();
+
                 } else {
                     JOptionPane.showMessageDialog(frame, "Las contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -165,7 +189,6 @@ public class CambioPin {
             @Override
             public void actionPerformed(ActionEvent e) {
                 successFrame.dispose(); // Cerrar la ventana actual
-                // Aquí puedes agregar la lógica para redirigir a otra operación
             }
         });
 

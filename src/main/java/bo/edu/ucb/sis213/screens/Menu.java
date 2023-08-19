@@ -1,9 +1,13 @@
 package bo.edu.ucb.sis213.screens;
 
+import bo.edu.ucb.sis213.GestorUsuario;
+import bo.edu.ucb.sis213.Usuario;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 public class Menu {
 
@@ -11,17 +15,25 @@ public class Menu {
     private JPanel menuPanel;
     private JLabel welcomeLabel;
 
-    public Menu(String usuario) {
+    private Connection connection;
+    private Usuario usuario;
+    private GestorUsuario gestorUsuario;
+
+    public Menu(Connection connection, Usuario usuario, GestorUsuario gestorUsuario) {
+        this.connection = connection;
+        this.usuario = usuario;
+        this.gestorUsuario = gestorUsuario;
+
         frame = new JFrame("ATM Menu");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 400);
 
-        initMenu(usuario);
+        initMenu();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    private void initMenu(String usuario) {
+    private void initMenu() {
         menuPanel = new JPanel(new GridBagLayout());
         Color bckg = new Color(0x0C0E9B);
         Color letras = new Color(0xF1E30A);
@@ -31,7 +43,7 @@ public class Menu {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.insets = new Insets(10, 10, 10, 10);
 
-        welcomeLabel = new JLabel("Bienvenido " + usuario, SwingConstants.CENTER);
+        welcomeLabel = new JLabel("Bienvenido " + usuario.getNombreUser(), SwingConstants.CENTER);
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 16));
         welcomeLabel.setForeground(letras);
         constraints.gridx = 0;
@@ -68,22 +80,22 @@ public class Menu {
     }
 
     private void manejoBotones(String buttonText) {
-        int userid=1;
+        int userid = 1;
         switch (buttonText) {
             case "Consultar Saldo":
-                new Consulta(userid);
+                new Consulta(connection, usuario, gestorUsuario);
                 // Agregar lógica para consultar saldo
                 break;
             case "Realizar Depósito":
-                new Deposito(userid);
+                new Deposito(connection, usuario, gestorUsuario);
                 // Agregar lógica para realizar depósito
                 break;
             case "Realizar Retiro":
-                new Retiros(userid);
+                new Retiros(connection, usuario, gestorUsuario);
                 // Agregar lógica para realizar retiro
                 break;
             case "Cambiar PIN":
-                new CambioPin(userid);
+                new CambioPin(connection, usuario, gestorUsuario);
                 // Agregar lógica para cambiar PIN
                 break;
             case "Salir":

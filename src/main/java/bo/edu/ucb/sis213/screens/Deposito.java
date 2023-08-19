@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import bo.edu.ucb.sis213.GestorUsuario;
+import bo.edu.ucb.sis213.Usuario;
 
 public class Deposito {
 
@@ -15,18 +18,25 @@ public class Deposito {
     private JTextField amountField;
     private JButton cancelButton;
     private JButton depositButton;
+    private Connection connection;
+    private Usuario usuario;
+    private GestorUsuario gestorUsuario;
 
-    public Deposito(int userid) {
+    public Deposito(Connection connection, Usuario usuario, GestorUsuario gestorUsuario) {
+        this.connection = connection;
+        this.usuario = usuario;
+        this.gestorUsuario = gestorUsuario;
+
         frame = new JFrame("Depósito");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 400);
 
-        initDeposito(userid);
+        initDeposito();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    private void initDeposito(int userid) {
+    private void initDeposito() {
         depositoPanel = new JPanel(new GridBagLayout());
         Color bckg = new Color(0x0C0E9B);
         Color letras = new Color(0xF1E30A);
@@ -83,38 +93,40 @@ public class Deposito {
         depositButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Agregar lógica para manejar el depósito
                 double depositAmount = Double.parseDouble(amountField.getText());
                 Color bckg = new Color(0x0C0E9B);
                 Color letras = new Color(0xF1E30A);
+
                 // Mostrar la pantalla de confirmación
                 JFrame confirmationFrame = new JFrame("Banco Luna");
                 confirmationFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 confirmationFrame.setSize(400, 400);
                 confirmationFrame.setLocationRelativeTo(null);
-
-
-                boolean flag=false;
-
-                if(flag){
-                    JPanel confirmacionPanel = new JPanel(new FlowLayout());
-                    confirmacionPanel.setBackground(bckg);
-                    JLabel confirmationLabel = new JLabel("Depósito realizado: $" + depositAmount);
-                    confirmationLabel.setForeground(letras);
-                    confirmationLabel.setFont(new Font("Arial", Font.BOLD, 16));
-                    confirmacionPanel.add(confirmationLabel);
-                    confirmationFrame.add(confirmacionPanel);
+                if(depositAmount<=0){
+                    JOptionPane.showMessageDialog(frame, "Cantidad no válida", "Error", JOptionPane.ERROR_MESSAGE);
                 }
                 else{
-                    JPanel confirmacionPanel = new JPanel(new FlowLayout());
-                    confirmacionPanel.setBackground(bckg);
-                    JLabel confirmationLabel = new JLabel("No se pudo realizar el deposito, saldo insuficiente");
-                    confirmationLabel.setForeground(letras);
-                    confirmationLabel.setFont(new Font("Arial", Font.BOLD, 16));
-                    confirmacionPanel.add(confirmationLabel);
-                    confirmationFrame.add(confirmacionPanel);
+                    boolean flag = gestorUsuario.realizarDeposito(usuario.getUsuarioId(), usuario.getSaldo(), depositAmount);
+                    if(flag){
+                        JPanel confirmacionPanel = new JPanel(new FlowLayout());
+                        confirmacionPanel.setBackground(bckg);
+                        JLabel confirmationLabel = new JLabel("Depósito realizado: $" + depositAmount);
+                        confirmationLabel.setForeground(letras);
+                        confirmationLabel.setFont(new Font("Arial", Font.BOLD, 16));
+                        confirmacionPanel.add(confirmationLabel);
+                        confirmationFrame.add(confirmacionPanel);
+                    }
+                    else{
+                        JPanel confirmacionPanel = new JPanel(new FlowLayout());
+                        confirmacionPanel.setBackground(bckg);
+                        JLabel confirmationLabel = new JLabel("No se pudo realizar el deposito, intente mas tarde");
+                        confirmationLabel.setForeground(letras);
+                        confirmationLabel.setFont(new Font("Arial", Font.BOLD, 16));
+                        confirmacionPanel.add(confirmationLabel);
+                        confirmationFrame.add(confirmacionPanel);
+                    }
+                    confirmationFrame.setVisible(true);
                 }
-                confirmationFrame.setVisible(true);
             }
         });
 
@@ -122,30 +134,3 @@ public class Deposito {
         frame.add(depositoPanel);
     }
 }
-/*
-    public static void realizarDeposito(Connection connection, int usuarioId, double saldoActual) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingrese la cantidad a depositar: $");
-        double cantidad = scanner.nextDouble();
-    
-        if (cantidad <= 0) {
-            System.out.println("Cantidad no válida.");
-        } else {
-            try {
-                String updateQuery = "UPDATE usuarios SET saldo = saldo + ? WHERE id = ?";
-                PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
-                updateStatement.setDouble(1, cantidad);
-                updateStatement.setInt(2, usuarioId); 
-                int colMod = updateStatement.executeUpdate(); //ver si se realizaron modificaciones
-                if (colMod > 0) {
-                    saldoActual += cantidad;
-                    System.out.println("Depósito realizado con éxito. Su nuevo saldo es: $" + saldoActual);
-                } else {
-                    System.out.println("Error al actualizar el saldo en la base de datos.");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-*/

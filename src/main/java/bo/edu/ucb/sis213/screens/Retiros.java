@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.sql.Connection;
+import bo.edu.ucb.sis213.GestorUsuario;
+import bo.edu.ucb.sis213.Usuario;
 public class Retiros {
 
     private JFrame frame;
@@ -15,19 +18,22 @@ public class Retiros {
     private JButton otherButton;
     private JButton cancelButton;
 
-    private double saldoActual = 1000.00; // Simulación de saldo actual
+    private double retiro; // Simulación de saldo actual
+    private Connection connection;
+    private Usuario usuario;
+    private GestorUsuario gestorUsuario;
 
-    public Retiros(int userid) {
+    public Retiros(Connection connection, Usuario usuario, GestorUsuario gestorUsuario) {
         frame = new JFrame("Retirar Saldo");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 400);
 
-        initRetiros(userid);
+        initRetiros();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    private void initRetiros(int userid) {
+    private void initRetiros() {
         retiroPanel = new JPanel(new GridBagLayout());
         Color bckg = new Color(0x0C0E9B);
         Color letras = new Color(0xF1E30A);
@@ -45,7 +51,7 @@ public class Retiros {
         constraints.gridwidth = 2;
         retiroPanel.add(titleLabel, constraints);
 
-        saldoLabel = new JLabel("Saldo actual: $" + saldoActual);
+        saldoLabel = new JLabel("Saldo actual: Bs" + usuario.getSaldo() );
         saldoLabel.setForeground(letras);
         constraints.gridy = 1;
         constraints.gridwidth = 2;
@@ -102,9 +108,22 @@ public class Retiros {
     }
 
     private void showQuickWithdrawConfirmation(double amount) {
-        int choice = JOptionPane.showConfirmDialog(frame, "¿Está seguro que desea retirar $" + amount + "?", "Confirmación", JOptionPane.YES_NO_OPTION);
+        int choice = JOptionPane.showConfirmDialog(frame, "¿Está seguro que desea retirar Bs" + amount + "?", "Confirmación", JOptionPane.YES_NO_OPTION);
         if (choice == JOptionPane.YES_OPTION) {
-            performWithdraw(amount);
+            if(amount< usuario.getSaldo()){
+                JOptionPane.showMessageDialog(frame, "Saldo insuficiente", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            else{
+                boolean flag=gestorUsuario.realizarRetiro(usuario.getUsuarioId(), usuario.getSaldo(), amount);
+                if(flag){
+                    performWithdraw(amount);
+                }
+                else{
+                    JOptionPane.showMessageDialog(frame, "No se pudo realizar el retiro", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+
         }
     }
 
@@ -171,17 +190,29 @@ public class Retiros {
         withdrawButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                double withdrawAmount = Double.parseDouble(amountField.getText());
-                otherWithdrawFrame.dispose(); // Cerrar la ventana de retiro personalizado
-                performWithdraw(withdrawAmount); // Ir a la pantalla de confirmación
+                double Amount = Double.parseDouble(amountField.getText());
+                if(Amount< usuario.getSaldo()){
+                    JOptionPane.showMessageDialog(frame, "Saldo insuficiente", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                else{
+                    boolean flag=gestorUsuario.realizarRetiro(usuario.getUsuarioId(), usuario.getSaldo(), Amount);
+                    if(flag){
+                        otherWithdrawFrame.dispose(); // Cerrar la ventana de retiro personalizado
+                        performWithdraw(Amount); // Ir a la pantalla de confirmación
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(frame, "No se pudo realizar el retiro", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             }
         });
     }
 
 
     private void performWithdraw(double amount) {
+        double saldoActual=usuario.getSaldo();
         saldoActual -= amount;
-        saldoLabel.setText("Saldo actual: $" + saldoActual);
+        saldoLabel.setText("Saldo actual: Bs" + saldoActual);
         Color bckg = new Color(0x0C0E9B);
         Color letras = new Color(0xF1E30A);
         // Mostrar la pantalla de confirmación de retiro

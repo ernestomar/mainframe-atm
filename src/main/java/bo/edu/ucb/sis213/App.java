@@ -1,5 +1,7 @@
 package bo.edu.ucb.sis213;
 
+import bo.edu.ucb.sis213.screens.Login;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -21,21 +23,10 @@ public class App {
             System.exit(1);
         }
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingrese su PIN de 4 dígitos: ");
-        int pinIngresado = scanner.nextInt();
-
-        GestorUsuario gestorUsuario = new GestorUsuario(connection);
 
         // Obtener el usuario y validar el PIN
         Usuario usuario = new Usuario(connection, 0, 0, 0, null); // Valores temporales
-
-        if (gestorUsuario.validarPIN(usuario, pinIngresado)) {
-            System.out.println("Bienvenid@ " + usuario.getNombreUser() + " 😀!!!!! ");
-            mostrarMenu(connection, usuario, gestorUsuario);
-        } else {
-            System.out.println("PIN incorrecto.");
-        }
+        new Login(connection);
     }
 
     public static void mostrarMenu(Connection connection, Usuario usuario, GestorUsuario gestorUsuario) {
