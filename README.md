@@ -5,13 +5,13 @@
 **Práctica de Línea de Comandos: Simulación de un Cajero Automático**
 
 **Objetivo:**  
-Desarrollar un programa interactivo en línea de comandos que simule las operaciones básicas de un cajero automático.
+Desarrollar un programa interactivo en interfas de usuario que simule las operaciones básicas de un cajero automático.
 
 **Instrucciones:**
 
 1. **Inicialización del Programa**:
 
-   - Al iniciar el programa, se debe solicitar al usuario que ingrese un PIN (Número de Identificación Personal) de 4 dígitos.
+   - Al iniciar el programa, se debe solicitar al usuario que ingrese su alias(usuario den el gui) y un PIN (Número de Identificación Personal) de 4 dígitos.
    - Si el PIN es incorrecto después de 3 intentos, el programa debe cerrarse con un mensaje de error.
    - Si el PIN es correcto, el usuario puede acceder al menú principal.
 
@@ -72,24 +72,8 @@ mvn clean install
 ## Ejecución
 
 ```
-mvn exec:java -Dexec.mainClass="bo.edu.ucb.sis213.App"
+mvn exec:java -Dexec.mainClass="bo.edu.ucb.sis213.Main"
 ```
-
-## Base de datos:
-
-Ir al documento bdd_atm.sql y ejecutar el codigo para duplicar la base de datos
-
-Las credenciales de conexion que se deben cambiar son:
-"Por defecto use esos datos"
-
-```
-
-DB_URL = "jdbc:mysql://localhost:3306/bdd_atm"
-DB_USER = "root"
-DB_PASSWORD = ""
-```
-
-#Version Docente (Yo use bdd mysql desde workbench conexion estandar)
 
 ## Instalación de la Base de Datos
 
@@ -118,3 +102,64 @@ use atm;
 ```
 
 5. Ejecutan el script init.sql de la carpeta database.
+
+---
+
+Nota: Una vez hecho el paso 1, para volver a correr el contenedor de docker(que tiene la base de datos)
+
+```
+docker start mysql-atm
+```
+
+Tambien verificar tener mysql apagado
+
+### Linux:
+
+```
+sudo service mysql stop
+```
+
+### Windows:
+
+Windows+R: services.msc
+Buscar mysql
+CLick derecho y darle en "Detener"
+
+---
+
+# Capturas de pantalla finales:
+
+Bienvenida:
+![Bienvenda](/mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-03.png)
+Interfaz inicial:
+![Bienvenda](/mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-10.png)
+
+Consulta de saldo:
+![Bienvenda](/mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-15.png)
+
+Realizando retiro:
+![Bienvenda](/mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-18.png)
+
+Realizando deposito:
+![Bienvenda](/mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-22.png)
+
+Cambio de PIN:
+![Bienvenda](/mainframe-atm/images_figma/Screenshot%20from%202023-08-19%2017-26-26.png)
+
+---
+
+# Diseño de la interfaz en FIGMA:
+
+Link:https://www.figma.com/file/MbnVrPWFMKVBYlolxlxUoG/ATM-Interfaz-de-usuario?type=design&node-id=0%3A1&mode=design&t=JkVmRgid1BEL3XrT-1
+
+Bienvenida:
+![Bienvenda](/mainframe-atm/images_figma/BienvenidaBanco.png)
+
+Interfaz iniciado sesion
+![Interfaz inicial](/mainframe-atm/images_figma/BienvenidaUsuario.png)
+Deposito de dinero
+![Deposito](/mainframe-atm/images_figma/RealizarDeposito.png)
+Retiro de dinero
+![Retiro](/mainframe-atm/images_figma/RealizarRetiro.png)
+Cambio de pin:
+![Cambio de PIN](/mainframe-atm/images_figma/CambiarPIN1.png)
