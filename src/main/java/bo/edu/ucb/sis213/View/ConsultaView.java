@@ -16,7 +16,7 @@ public class ConsultaView {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
-        saldoLabel = new JLabel("Su saldo actual es: $" + saldo);
+        saldoLabel = new JLabel("Su saldo actual es: " +saldo+" Bs.");
         saldoLabel.setHorizontalAlignment(JLabel.CENTER);
         frame.add(saldoLabel, BorderLayout.CENTER);
 

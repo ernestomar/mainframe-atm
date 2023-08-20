@@ -3,7 +3,6 @@ package bo.edu.ucb.sis213.View;
 import javax.swing.*;
 
 import bo.edu.ucb.sis213.Controller.App;
-import bo.edu.ucb.sis213.Model.BackModel;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,15 +14,11 @@ public class RetiroView {
     private JTextField cantidadField;
     private JButton aceptarButton;
     private JButton cancelarButton;
-
-    
-    private BackModel model;
     private App controller;
 
     public RetiroView(Connection connection) {
         frame = new JFrame("Retiro");
         this.controller = new App(connection);
-        this.model = new BackModel(connection);
         frame.setSize(300, 150);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
@@ -44,39 +39,36 @@ public class RetiroView {
         buttonPanel.add(cancelarButton);
         frame.add(buttonPanel, BorderLayout.SOUTH);
 
-        // Acción para el botón Aceptar
         aceptarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String cantidadStr = cantidadField.getText();
-                double cantidad = Double.parseDouble(cantidadStr);
-
-                try {
-                    System.out.println("cant: "+cantidad);
-                    model.realizarRetiro(cantidad);//aqui me quede TT
-                    // controller.realizarDeposito(cantidad);
-                //  controller.realizarDeposito(cantidad); // Llama al método en el controlador   
-                } catch (Exception ex) {
-                    System.out.println("Error Susana TT");
-                    ex.printStackTrace();
-                }
-                frame.dispose();
+                retirar();
             }
         });
-        
-
-        // Acción para el botón Cancelar
         cancelarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 close();
             }
         });
-
-        // frame.add(mainPanel);
         frame.setVisible(true);
     }
 
+    public void retirar(){
+        String cantidadStr = cantidadField.getText();
+        try {
+            if(controller.realizarRetiro(cantidadStr)){
+                close();
+            }else{
+                return;
+            }
+        } catch (Exception ex) {
+            System.out.println("Error Ss TT");
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al realizar el dep\u00F3sito: "+ex, "Error", JOptionPane.ERROR_MESSAGE);
+            close();
+        }
+    }
     public void close() {
         frame.dispose();
     }

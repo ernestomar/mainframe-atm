@@ -3,7 +3,6 @@ package bo.edu.ucb.sis213.View;
 import javax.swing.*;
 
 import bo.edu.ucb.sis213.Controller.App;
-import bo.edu.ucb.sis213.Model.BackModel;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,15 +14,13 @@ public class DepositoView {
     private JTextField cantidadField;
     private JButton aceptarButton;
     private JButton cancelarButton;
-
-    
-    private BackModel model;
     private App controller;
+    // private BackModel model;
 
     public DepositoView(Connection connection) {
         frame = new JFrame("Depósito");
+        // this.model = new BackModel(connection);
         this.controller = new App(connection);
-        this.model = new BackModel(connection);
         frame.setSize(300, 150);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
@@ -43,38 +40,35 @@ public class DepositoView {
         buttonPanel.add(aceptarButton);
         buttonPanel.add(cancelarButton);
         frame.add(buttonPanel, BorderLayout.SOUTH);
-
-        // Acción para el botón Aceptar
         aceptarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String cantidadStr = cantidadField.getText();
-                double cantidad = Double.parseDouble(cantidadStr);
-
-                try {
-                    System.out.println("cant: "+cantidad);
-                    model.realizarDeposito(cantidad);
-                    // controller.realizarDeposito(cantidad);
-                //  controller.realizarDeposito(cantidad); // Llama al método en el controlador   
-                } catch (Exception ex) {
-                    System.out.println("Error Susana TT");
-                    ex.printStackTrace();
-                }
-                frame.dispose();
+                depositar();
             }
         });
-        
-
-        // Acción para el botón Cancelar
         cancelarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 close();
             }
         });
-
-        // frame.add(mainPanel);
         frame.setVisible(true);
+    }
+    public void depositar(){
+        String cantidadStr = cantidadField.getText();
+        try {
+            System.out.println("cant: "+cantidadStr);
+            if(controller.realizarDeposito(cantidadStr)){//si guardo?
+                close();
+            }else{
+                return;
+            }   
+        } catch (Exception ex) {
+            System.out.println("Error S TT");
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al realizar el dep\u00F3sito: "+ex, "Error", JOptionPane.ERROR_MESSAGE);
+            close();
+        }
     }
 
     public void close() {
