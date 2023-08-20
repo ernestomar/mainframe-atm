@@ -22,48 +22,53 @@ public class CambiarPinView {
         this.controller = new App(connection);
         // this.model = new BackModel(connection);
         frame = new JFrame("Cambiar PIN");
-        frame.setSize(300, 250);
+        frame.setSize(700, 440);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
+        frame.getContentPane().setLayout(new BorderLayout());
 
-        JPanel mainPanel = new JPanel(new GridLayout(4, 2)); 
-        JLabel pinAntiguoLabel = new JLabel("Ingrese el PIN antiguo:");
+        JPanel mainPanel = new JPanel();
+        mainPanel.setBackground(new Color(0, 139, 139));
         JLabel nuevoPinLabel = new JLabel("Ingrese el nuevo PIN:");
+        nuevoPinLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
+        nuevoPinLabel.setBounds(121, 53, 301, 47);
         JLabel confirmarPinLabel = new JLabel("Confirmar nuevo PIN:");
+        confirmarPinLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
+        confirmarPinLabel.setBounds(121, 182, 301, 47);
         nuevoPinField = new JPasswordField();
+        nuevoPinField.setBounds(121, 110, 464, 30);
         confirmarPinField = new JPasswordField();
-
-        aceptarButton = new JButton("Aceptar");
-        cancelarButton = new JButton("Cancelar");
-
-        mainPanel.add(pinAntiguoLabel);
+        confirmarPinField.setBounds(121, 239, 464, 30);
+        mainPanel.setLayout(null);
         mainPanel.add(nuevoPinLabel);
         mainPanel.add(nuevoPinField);
         mainPanel.add(confirmarPinLabel);
         mainPanel.add(confirmarPinField);
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(aceptarButton);
-        buttonPanel.add(cancelarButton);
-
-        frame.add(mainPanel, BorderLayout.CENTER);
-        frame.add(buttonPanel, BorderLayout.SOUTH);
-
-        aceptarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cambiar();
-            }
-        });
-
-        cancelarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                close();
-            }
-        });
+        frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
+        
+                aceptarButton = new JButton("Aceptar");
+                aceptarButton.setBounds(190, 322, 136, 35);
+                mainPanel.add(aceptarButton);
+                cancelarButton = new JButton("Cancelar");
+                cancelarButton.setBounds(340, 322, 136, 35);
+                mainPanel.add(cancelarButton);
+                
+                        cancelarButton.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                close();
+                            }
+                        });
+                
+                        aceptarButton.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                cambiar();
+                            }
+                        });
 
         frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
     }
 
     public void cambiar(){

@@ -1,5 +1,36 @@
 # Ejemplo de Cajero Automático como si fuera Mainframe.
 
+Se recomienda ejecutar con:
+```
+mvn exec:java
+```
+Por cambios en pom.xml
+
+## Diseño
+**Login:** 
+
+![Alt text](image.png)
+
+**Menú:** 
+
+![Alt text](image-1.png)
+
+**Cosultar saldo:** 
+
+![Alt text](image-2.png)
+
+**Depósito:** 
+
+![Alt text](image-3.png)
+
+**Retiro:** 
+
+![Alt text](image-4.png)
+
+**Cambio de PIN:** 
+
+![Alt text](image-5.png)
+
 ## Funcionalidad
 
 **Práctica de Línea de Comandos: Simulación de un Cajero Automático**
@@ -70,6 +101,12 @@ mvn clean install
 ```
 mvn exec:java -Dexec.mainClass="bo.edu.ucb.sis213.App"
 ```
+
+Si hay problemas, se recomienda ejecutar con:
+```
+mvn exec:java
+```
+Por cambios en pom.xml
 
 ## Instalación de la Base de Datos
 

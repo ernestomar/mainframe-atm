@@ -12,26 +12,30 @@ public class ConsultaView {
 
     public ConsultaView(double saldo) {
         frame = new JFrame("Consulta de Saldo");
-        frame.setSize(300, 200);
+        frame.getContentPane().setBackground(new Color(0, 139, 139));
+        frame.setSize(550, 350);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
+        frame.getContentPane().setLayout(null);
 
         saldoLabel = new JLabel("Su saldo actual es: " +saldo+" Bs.");
+        saldoLabel.setForeground(new Color(255, 255, 255));
+        saldoLabel.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 30));
+        saldoLabel.setBounds(0, 10, 536, 208);
         saldoLabel.setHorizontalAlignment(JLabel.CENTER);
-        frame.add(saldoLabel, BorderLayout.CENTER);
-
-        aceptarButton = new JButton("Aceptar");
-        aceptarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                close();
-            }
-        });
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(aceptarButton);
-        frame.add(buttonPanel, BorderLayout.SOUTH);
+        frame.getContentPane().add(saldoLabel);
+        
+                aceptarButton = new JButton("Aceptar");
+                aceptarButton.setBounds(166, 228, 216, 39);
+                frame.getContentPane().add(aceptarButton);
+                aceptarButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        close();
+                    }
+                });
 
         frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
     }
 
     public void close() {

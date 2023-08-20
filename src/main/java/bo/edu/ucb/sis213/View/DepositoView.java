@@ -21,38 +21,43 @@ public class DepositoView {
         frame = new JFrame("Depósito");
         // this.model = new BackModel(connection);
         this.controller = new App(connection);
-        frame.setSize(300, 150);
+        frame.setSize(550, 350);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
+        frame.getContentPane().setLayout(new BorderLayout());
 
-        JLabel label = new JLabel("Ingrese la cantidad a depositar: $");
+        JLabel lblIngreseLaCantidad = new JLabel("Ingrese la cantidad a depositar: ");
+        lblIngreseLaCantidad.setFont(new Font("Tahoma", Font.BOLD, 22));
+        lblIngreseLaCantidad.setBounds(65, 65, 368, 35);
         cantidadField = new JTextField();
+        cantidadField.setBounds(65, 137, 396, 35);
         
-        JPanel inputPanel = new JPanel(new FlowLayout());
-        inputPanel.add(label);
+        JPanel inputPanel = new JPanel();
+        inputPanel.setBackground(new Color(0, 139, 139));
+        inputPanel.setLayout(null);
+        inputPanel.add(lblIngreseLaCantidad);
         inputPanel.add(cantidadField);
-        frame.add(inputPanel, BorderLayout.CENTER);
+        frame.getContentPane().add(inputPanel, BorderLayout.CENTER);
 
         aceptarButton = new JButton("Aceptar");
+        aceptarButton.setBounds(116, 225, 136, 35);
+        inputPanel.add(aceptarButton);
         cancelarButton = new JButton("Cancelar");
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(aceptarButton);
-        buttonPanel.add(cancelarButton);
-        frame.add(buttonPanel, BorderLayout.SOUTH);
-        aceptarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                depositar();
-            }
-        });
+        cancelarButton.setBounds(266, 225, 136, 35);
+        inputPanel.add(cancelarButton);
         cancelarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 close();
             }
         });
+        aceptarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                depositar();
+            }
+        });
         frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
     }
     public void depositar(){
         String cantidadStr = cantidadField.getText();

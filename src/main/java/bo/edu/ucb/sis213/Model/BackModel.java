@@ -195,7 +195,7 @@ public class BackModel {
 
     public boolean cambiarPIN(int newPIN, int confirmPIN) throws SQLException {
         if (newPIN == confirmPIN) {
-            if(getPinActual()==newPIN){
+            if(Integer.parseInt(getPinActual())==newPIN){
                 JOptionPane.showMessageDialog(null, "Esta ingresando el mismo PIN", "Observaci\u00F3n", JOptionPane.INFORMATION_MESSAGE);
             }else{
                 int oppin = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de cambiar su pin?", "Confirmar", JOptionPane.YES_NO_OPTION);
@@ -236,7 +236,7 @@ public class BackModel {
 
     
 
-    public int getPinActual() {
+    public String getPinActual() {
         String query = "SELECT pin FROM usuarios WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -244,12 +244,12 @@ public class BackModel {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                return resultSet.getInt("pin");
+                return resultSet.getString("pin");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0; 
+        return ""; 
     }
 
     public int getIntentosRestantes() {

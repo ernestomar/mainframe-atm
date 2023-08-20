@@ -67,32 +67,26 @@ public class App {
 
     // }
     public void validarPIN(int i, JFrame frame){
-        int currentPIN=0;
-        System.out.print(i);
+        // int currentPIN=0;
+        System.out.println(i);
         JPasswordField pinField = new JPasswordField();
                 int option = JOptionPane.showConfirmDialog(null, pinField, "Ingrese su PIN", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                 if (option == JOptionPane.OK_OPTION) {
                     String pinStr=String.valueOf(pinField.getPassword());
                     if(i>0){//si aún tiene intentos, solo se le dio 3
-                        if(pinStr.isEmpty()){
+                        if(pinStr.isEmpty() || pinStr==" "){
                             JOptionPane.showMessageDialog(null, "Campo Vacio. Tiene "+(i)+" intentos.\n(Si se le acaba los intentos, su sesi\u00F3n se cerrara)", "Error", JOptionPane.WARNING_MESSAGE);
                             validarPIN(i-1, frame);        
                         }else{
-                            try {
-                            currentPIN=Integer.parseInt(pinStr);
-                            // controller.validarPIN(currentPIN);
-                            if (currentPIN == model.getPinActual()) {
+                            System.out.println(pinStr);
+                            System.out.println(model.getPinActual());
+                            if (pinStr.equalsIgnoreCase(model.getPinActual())) {
                                     mostrarCambioPINView();
                                 }else {
                                     System.out.println("PIN incorrecto.");
                                     JOptionPane.showMessageDialog(null, "PIN incorrecto. Tiene "+(i)+" intentos.\n(Si se le acaba los intentos, su sesión se cerrara)", "Error", JOptionPane.WARNING_MESSAGE);
                                     validarPIN(i-1, frame);
                                 }
-                            } catch (Exception e) {
-                                //esta ingresando un valor string y las contraseñas son tipo int, pero no se le dirá al usuario del error, solo que esta incorrecta, para no dar "pistas", por así decirlo, del pin
-                                JOptionPane.showMessageDialog(null, "PIN incorrecto. Tiene "+(i)+" intentos.\n(Si se le acaba los intentos, su sesión se cerrara)", "Error", JOptionPane.WARNING_MESSAGE);
-                                validarPIN(i-1, frame);
-                            }
                         }
                     }else{
                         JOptionPane.showMessageDialog(null, "PIN incorrecto. Ha excedido el n\u00FAmero de intento(s).", "Error", JOptionPane.ERROR_MESSAGE);
