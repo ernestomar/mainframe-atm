@@ -9,27 +9,27 @@ Por cambios en pom.xml
 ## Diseño
 **Login:** 
 
-![Alt text](image.png)
+![Alt text](images/image.png)
 
 **Menú:** 
 
-![Alt text](image-1.png)
+![Alt text](images/image-1.png)
 
 **Cosultar saldo:** 
 
-![Alt text](image-2.png)
+![Alt text](images/image-2.png)
 
 **Depósito:** 
 
-![Alt text](image-3.png)
+![Alt text](images/image-3.png)
 
 **Retiro:** 
 
-![Alt text](image-4.png)
+![Alt text](images/image-4.png)
 
 **Cambio de PIN:** 
 
-![Alt text](image-5.png)
+![Alt text](images/image-5.png)
 
 ## Funcionalidad
 
