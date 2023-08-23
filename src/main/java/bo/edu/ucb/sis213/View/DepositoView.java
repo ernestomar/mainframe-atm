@@ -1,8 +1,8 @@
-package bo.edu.ucb.sis213.View;
+package bo.edu.ucb.sis213.view;
 
 import javax.swing.*;
 
-import bo.edu.ucb.sis213.Controller.App;
+// import bo.edu.ucb.sis213.Controller.Controller;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,13 +14,13 @@ public class DepositoView {
     private JTextField cantidadField;
     private JButton aceptarButton;
     private JButton cancelarButton;
-    private App controller;
+    // private Controller controller;
     // private BackModel model;
 
     public DepositoView(Connection connection) {
         frame = new JFrame("Depósito");
         // this.model = new BackModel(connection);
-        this.controller = new App(connection);
+        // this.controller = new Controller(connection);
         frame.setSize(550, 350);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().setLayout(new BorderLayout());
@@ -63,11 +63,11 @@ public class DepositoView {
         String cantidadStr = cantidadField.getText();
         try {
             System.out.println("cant: "+cantidadStr);
-            if(controller.realizarDeposito(cantidadStr)){//si guardo?
-                close();
-            }else{
-                return;
-            }   
+            // if(controller.realizarDeposito(cantidadStr)){//si guardo?
+            //     close();
+            // }else{
+            //     return;
+            // }   
         } catch (Exception ex) {
             System.out.println("Error S TT");
             ex.printStackTrace();

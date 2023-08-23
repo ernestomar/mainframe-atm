@@ -1,12 +1,16 @@
-package bo.edu.ucb.sis213.View;
+package bo.edu.ucb.sis213.view;
+
 
 import javax.swing.*;
+
+import bo.edu.ucb.sis213.bl.AtmBL;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 
-import bo.edu.ucb.sis213.Controller.App;
+// import bo.edu.ucb.sis213.Controller.App;
 
 public class LoginView {
     private JPanel loginPanel;
@@ -14,11 +18,11 @@ public class LoginView {
     private JPasswordField pinField;
     private JButton loginButton;
     private JFrame frame;
-    private App controller;
+    private AtmBL bl=null;
 
 
-    public LoginView(Connection connection) {
-        this.controller = new App(connection);
+    public LoginView() {
+        // this.controller = new App(connection);
         frame = new JFrame("ATM App");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(703, 450);
@@ -41,7 +45,21 @@ public class LoginView {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                validarCredencialesV(userField.getText(), new String(pinField.getPassword()));
+                try {
+                    String user = userField.getText();
+                    String pin=new String(pinField.getPassword());
+                    bl= new AtmBL(user, Integer.parseInt(pin));
+                    if (bl.validarLoginBL(user, pin)) {
+                        close();
+                        // menuView = new MenuView(connection, usuario);//controññer
+                        new MenuView(user);
+                        System.out.println("ABRIMOS MENU :D");
+                    }else{
+                        return;
+                    }
+                } catch (Exception ex) {
+                    // TODO: handle exception
+                }
             }
         });
         loginPanel.setLayout(null);
@@ -74,16 +92,16 @@ public class LoginView {
         btnNewButton.setBounds(594, 382, 85, 21);
         loginPanel.add(btnNewButton);
     }
-    public void validarCredencialesV(String usuario, String pin) {
-        if (controller.validarEntrada(usuario, pin)) {
-            close();
-            // menuView = new MenuView(connection, usuario);//controññer
-            controller.mostrarMenu(usuario);
-            System.out.println("ABRIMOS MENU :D");
-        }else{
-            return;
-        }
-    }
+    // public void validarCredencialesV(String usuario, String pin) {
+    //     if (controller.validarEntrada(usuario, pin)) {
+    //         close();
+    //         // menuView = new MenuView(connection, usuario);//controññer
+    //         controller.mostrarMenu(usuario);
+    //         System.out.println("ABRIMOS MENU :D");
+    //     }else{
+    //         return;
+    //     }
+    // }
 
     public void close() {
         frame.dispose();

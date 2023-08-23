@@ -1,12 +1,15 @@
-package bo.edu.ucb.sis213.View;
+package bo.edu.ucb.sis213.view;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.ModuleLayer.Controller;
 import java.sql.Connection;
 
-import bo.edu.ucb.sis213.Controller.App;
+// import bo.edu.ucb.sis213.Controller.Controller;
+import bo.edu.ucb.sis213.bl.AtmBL;
+
 import javax.swing.border.LineBorder;
 
 public class MenuView {
@@ -17,21 +20,21 @@ public class MenuView {
     private JButton changePinButton;
     private JButton exitButton;
     private JFrame frame;
-    private App controller;
+    private Controller controller;
     private JButton btnNewButton;
 
-    public MenuView(Connection connection, String username) {
-        this.controller = new App(connection);
+    public MenuView(String username) {
+        // this.controller = new Controller(connection);
         frame = new JFrame("ATM App - Menú Principal");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(868, 526);
 
-        initMainMenu(username, connection);
+        initMainMenu(username);
 
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
     }
-    private void initMainMenu(String username, Connection connection) {
+    private void initMainMenu(String username) {
         mainMenuPanel = new JPanel();
         mainMenuPanel.setBorder(new LineBorder(new Color(0, 139, 139), 0, true));
         mainMenuPanel.setBackground(new Color(15, 15, 112));
@@ -43,7 +46,7 @@ public class MenuView {
         checkBalanceButton.setBounds(104, 118, 259, 102);
         checkBalanceButton.setBorder(new LineBorder(new Color(0, 139, 139), 5, true));
         
-        depositButton = new JButton("Realizar un depósito");
+        depositButton = new JButton("Realizar un dep\u00F3sito");
         depositButton.setForeground(new Color(255, 255, 255));
         depositButton.setBackground(new Color(0, 128, 128));
         depositButton.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 22));
@@ -71,28 +74,28 @@ public class MenuView {
         checkBalanceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.consultarSaldo();
+                new ConsultaView();
             }
         });
 
         depositButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.mostrarDepositoView();
+                // controller.mostrarDepositoView();
             }
         });
         
         withdrawButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.mostrarRetiroView();
+                // controller.mostrarRetiroView();
             }
         });
 
         changePinButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.validarPIN(2, frame);
+                // controller.validarPIN(2, frame);
                 
             }
         });
@@ -103,7 +106,7 @@ public class MenuView {
                 int oplogout = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de cerrar su sesión ?", "Confirmar", JOptionPane.YES_NO_OPTION);
                 if (oplogout == JOptionPane.YES_OPTION) {
                     close();
-                    controller.LoginView();
+                    new LoginView();
                 }else{
                     return;
                 }

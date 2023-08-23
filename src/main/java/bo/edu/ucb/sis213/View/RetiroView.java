@@ -1,8 +1,8 @@
-package bo.edu.ucb.sis213.View;
+package bo.edu.ucb.sis213.view;
 
 import javax.swing.*;
 
-import bo.edu.ucb.sis213.Controller.App;
+// import bo.edu.ucb.sis213.Controller.Controller;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,11 +14,11 @@ public class RetiroView {
     private JTextField cantidadField;
     private JButton aceptarButton;
     private JButton cancelarButton;
-    private App controller;
+    // private Controller controller;
 
     public RetiroView(Connection connection) {
         frame = new JFrame("Retiro");
-        this.controller = new App(connection);
+        // this.controller = new Controller(connection);
         frame.setSize(550, 350);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().setLayout(new BorderLayout());
@@ -62,11 +62,11 @@ public class RetiroView {
     public void retirar(){
         String cantidadStr = cantidadField.getText();
         try {
-            if(controller.realizarRetiro(cantidadStr)){
-                close();
-            }else{
-                return;
-            }
+            // if(controller.realizarRetiro(cantidadStr)){
+            //     close();
+            // }else{
+            //     return;
+            // }
         } catch (Exception ex) {
             System.out.println("Error Ss TT");
             ex.printStackTrace();

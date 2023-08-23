@@ -1,8 +1,8 @@
-package bo.edu.ucb.sis213.View;
+package bo.edu.ucb.sis213.view;
 
 import javax.swing.*;
 
-import bo.edu.ucb.sis213.Controller.App;
+// import bo.edu.ucb.sis213.Controller.Controller;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,11 +15,11 @@ public class CambiarPinView {
     private JPasswordField confirmarPinField;
     private JButton aceptarButton;
     private JButton cancelarButton;
-    private App controller;
+    // private Controller controller;
 
 
     public CambiarPinView(Connection connection) {
-        this.controller = new App(connection);
+        // this.controller = new Controller(connection);
         // this.model = new BackModel(connection);
         frame = new JFrame("Cambiar PIN");
         frame.setSize(700, 440);
@@ -81,11 +81,11 @@ public class CambiarPinView {
             int nuevoPin = Integer.parseInt(nuevoPinStr);
             int confirmarNuevoPin = Integer.parseInt(confirmarNuevoPinStr);
             try {
-                if(controller.cambioPIN(nuevoPin,confirmarNuevoPin)){
-                    close();
-                }else{
-                    return;
-                }
+                // if(controller.cambioPIN(nuevoPin,confirmarNuevoPin)){
+                //     close();
+                // }else{
+                //     return;
+                // }
             } catch (Exception e) {
                 System.out.println("Ayuda Sofia TT.");
                 e.printStackTrace();

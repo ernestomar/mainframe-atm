@@ -1,6 +1,9 @@
-package bo.edu.ucb.sis213.View;
+package bo.edu.ucb.sis213.view;
 
 import javax.swing.*;
+
+import bo.edu.ucb.sis213.bl.AtmBL;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,14 +13,19 @@ public class ConsultaView {
     private JLabel saldoLabel;
     private JButton aceptarButton;
 
-    public ConsultaView(double saldo) {
+    // private AtmBL bl;
+    // private double saldo= bl.obtenerSaldoBL();
+
+    public ConsultaView() {
+        // saldo = bl.obtenerSaldoBL();
+
         frame = new JFrame("Consulta de Saldo");
         frame.getContentPane().setBackground(new Color(0, 139, 139));
         frame.setSize(550, 350);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
-        saldoLabel = new JLabel("Su saldo actual es: " +saldo+" Bs.");
+        // saldoLabel = new JLabel("Su saldo actual es: " +saldo+" Bs.");
         saldoLabel.setForeground(new Color(255, 255, 255));
         saldoLabel.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 30));
         saldoLabel.setBounds(0, 10, 536, 208);

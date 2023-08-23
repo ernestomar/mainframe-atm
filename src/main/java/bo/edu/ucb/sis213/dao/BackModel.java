@@ -1,4 +1,4 @@
-package bo.edu.ucb.sis213.Model;
+package bo.edu.ucb.sis213.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +15,7 @@ public class BackModel {
     public BackModel(Connection connection) {
         this.connection = connection;
         intentosRestantes = 3;
-        saldo=getSaldo();
+
     }
 
     public boolean validarCredenciales(String usuario, String pin) {
@@ -63,22 +63,22 @@ public class BackModel {
         return false;
     }
 
-    public double getSaldo() {
-        String query = "SELECT saldo FROM usuarios WHERE id = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, usuarioId);
-            ResultSet resultSet = preparedStatement.executeQuery();
+    // public double getSaldo() {
+    //     String query = "SELECT saldo FROM usuarios WHERE id = ?";
+    //     try {
+    //         PreparedStatement preparedStatement = connection.prepareStatement(query);
+    //         preparedStatement.setInt(1, usuarioId);
+    //         ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()) {
-                return resultSet.getDouble("saldo");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al obtener saldo."+e, "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        return 0.0; // Retornar un valor por defecto en caso de error
-    }
+    //         if (resultSet.next()) {
+    //             return resultSet.getDouble("saldo");
+    //         }
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //         JOptionPane.showMessageDialog(null, "Error al obtener saldo."+e, "Error", JOptionPane.ERROR_MESSAGE);
+    //     }
+    //     return 0.0; // Retornar un valor por defecto en caso de error
+    // }
 
     public boolean realizarDeposito(String cantidadStr) {
         double cantidad=0;
@@ -99,18 +99,18 @@ public class BackModel {
                     JOptionPane.showMessageDialog(null, "Cantidad no v\u00E1lida.", "Error", JOptionPane.ERROR_MESSAGE);
                 }else{
                 System.out.println(saldo);//joption4
-                System.out.println(getSaldo());//joption4
+                // System.out.println(getSaldo());//joption4
                 System.out.println("\nDepósito==" + saldo);//joption5
                 int opdep = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de dep\u00F3sitar "+cantidadStr+" Bs. ?", "Confirmar", JOptionPane.YES_NO_OPTION);
                 if (opdep == JOptionPane.YES_OPTION) {
                     try {
                         saldo += cantidad;
-                        actualizarSaldo(connection, saldo);
-                        registrarOperacion(connection, "Deposito", cantidad);
+                        // actualizarSaldo(connection, saldo);
+                        // registrarOperacion(connection, "Deposito", cantidad);
                         System.out.println("\nDepósito realizado con éxito. Su nuevo saldo es: $" + saldo);//joption5
                         JOptionPane.showMessageDialog(null, "Dep\u00F3sito realizado con \u00E9xito. Su nuevo saldo es: " + saldo+" Bs.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                         return true;
-                    } catch (SQLException ex) {
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                         System.out.println("\nError al realizar el depósito.");
                         JOptionPane.showMessageDialog(null, "Error al realizar el dep\u00F3sito.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -147,12 +147,12 @@ public class BackModel {
                     saldo -= cantidad;
                     System.out.println("\nDepósito==" + saldo);
                     try {
-                        actualizarSaldo(connection, saldo); 
-                        registrarOperacion(connection, "Retiro", -cantidad); 
+                        // actualizarSaldo(connection, saldo); 
+                        // registrarOperacion(connection, "Retiro", -cantidad); 
                         System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + saldo);
                         JOptionPane.showMessageDialog(null, "Retiro realizado con \u00E9xito. Su nuevo saldo es: " + saldo+" Bs.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                         return true;
-                    } catch (SQLException ex) {
+                    } catch (Exception ex) {
                         System.out.println("Error al realizar el retiro.");
                         ex.printStackTrace();
                     }
@@ -165,34 +165,34 @@ public class BackModel {
         return false;
     }
 
-    public static void actualizarSaldo(Connection connection, double nuevoSaldo) throws SQLException {
-        String query = "UPDATE usuarios SET saldo = ? WHERE id = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setDouble(1, nuevoSaldo);
-            preparedStatement.setInt(2, usuarioId);
-            preparedStatement.executeUpdate();
-        }catch (SQLException ex) {
-            System.out.println("Error al actualizar el saldo.");
-            JOptionPane.showMessageDialog(null, "Error al actualizar el saldo.", "Error", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
-        }
-    }
+    // public static void actualizarSaldo(Connection connection, double nuevoSaldo) throws SQLException {
+    //     String query = "UPDATE usuarios SET saldo = ? WHERE id = ?";
+    //     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+    //         preparedStatement.setDouble(1, nuevoSaldo);
+    //         preparedStatement.setInt(2, usuarioId);
+    //         preparedStatement.executeUpdate();
+    //     }catch (SQLException ex) {
+    //         System.out.println("Error al actualizar el saldo.");
+    //         JOptionPane.showMessageDialog(null, "Error al actualizar el saldo.", "Error", JOptionPane.ERROR_MESSAGE);
+    //         ex.printStackTrace();
+    //     }
+    // }
     
-    public static void registrarOperacion(Connection connection, String tipoOperacion, double cantidad) throws SQLException {
-        String insertQuery = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, ?, ?)";
-        try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
-            insertStatement.setInt(1, usuarioId);
-            insertStatement.setString(2, tipoOperacion);
-            insertStatement.setDouble(3, cantidad);
-            insertStatement.executeUpdate();
-        }catch (SQLException ex) {
-            System.out.println("Error al registrar la operación.");
-            JOptionPane.showMessageDialog(null, "Error al registrar la operaci\u00F3n.", "Error", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
-        }
-    }  
+    // public static void registrarOperacion(Connection connection, String tipoOperacion, double cantidad) throws SQLException {
+    //     String insertQuery = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, ?, ?)";
+    //     try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
+    //         insertStatement.setInt(1, usuarioId);
+    //         insertStatement.setString(2, tipoOperacion);
+    //         insertStatement.setDouble(3, cantidad);
+    //         insertStatement.executeUpdate();
+    //     }catch (SQLException ex) {
+    //         System.out.println("Error al registrar la operación.");
+    //         JOptionPane.showMessageDialog(null, "Error al registrar la operaci\u00F3n.", "Error", JOptionPane.ERROR_MESSAGE);
+    //         ex.printStackTrace();
+    //     }
+    // }  
     
-
+/*
     public boolean cambiarPIN(int newPIN, int confirmPIN) throws SQLException {
         if (newPIN == confirmPIN) {
             if(Integer.parseInt(getPinActual())==newPIN){
@@ -219,38 +219,38 @@ public class BackModel {
             JOptionPane.showMessageDialog(null, "Los PINs no coinciden.", "Error", JOptionPane.WARNING_MESSAGE);
         }
         return false;
-    }
-    public static void actualizarPIN(Connection connection, int nuevoPin) throws SQLException {
-        String query = "UPDATE usuarios SET pin = ? WHERE id = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, nuevoPin);
-            preparedStatement.setInt(2, usuarioId);
-            preparedStatement.executeUpdate();
-        } catch (SQLException ex) {
-            System.out.println("Error al actualizar el PIN.");
-            ex.printStackTrace();
-        }
-    }
+    }*/
+    // public static void actualizarPIN(Connection connection, int nuevoPin) throws SQLException {
+    //     String query = "UPDATE usuarios SET pin = ? WHERE id = ?";
+    //     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+    //         preparedStatement.setInt(1, nuevoPin);
+    //         preparedStatement.setInt(2, usuarioId);
+    //         preparedStatement.executeUpdate();
+    //     } catch (SQLException ex) {
+    //         System.out.println("Error al actualizar el PIN.");
+    //         ex.printStackTrace();
+    //     }
+    // }
     
     
 
     
 
-    public String getPinActual() {
-        String query = "SELECT pin FROM usuarios WHERE id = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, usuarioId);
-            ResultSet resultSet = preparedStatement.executeQuery();
+    // public String getPinActual() {
+    //     String query = "SELECT pin FROM usuarios WHERE id = ?";
+    //     try {
+    //         PreparedStatement preparedStatement = connection.prepareStatement(query);
+    //         preparedStatement.setInt(1, usuarioId);
+    //         ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()) {
-                return resultSet.getString("pin");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return ""; 
-    }
+    //         if (resultSet.next()) {
+    //             return resultSet.getString("pin");
+    //         }
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //     }
+    //     return ""; 
+    // }
 
     public int getIntentosRestantes() {
         return intentosRestantes;
