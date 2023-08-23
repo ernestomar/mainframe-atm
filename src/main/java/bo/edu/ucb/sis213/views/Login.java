@@ -1,7 +1,7 @@
-package bo.edu.ucb.sis213.screens;
-import bo.edu.ucb.sis213.Conexion;
-import bo.edu.ucb.sis213.GestorUsuario;
-import bo.edu.ucb.sis213.Usuario;
+package bo.edu.ucb.sis213.views;
+import bo.edu.ucb.sis213.bl.GestorUsuario;
+import bo.edu.ucb.sis213.bl.UsuarioBl;
+import bo.edu.ucb.sis213.dao.ConexionDao;
 
 import javax.swing.*;
 import java.awt.*;
@@ -98,7 +98,7 @@ public class Login {
                 System.out.println("Contraseña: " + contrasena);
 
                 GestorUsuario gestorUsuario = new GestorUsuario(connection);
-                Usuario usuario = new Usuario(connection, 0, 0, 0, null);
+                UsuarioBl usuario = new UsuarioBl(connection, 0, 0, 0, null);
                 if (gestorUsuario.validarPIN(usuario, contrasena)) {
                     System.out.println("Bienvenid@ " + usuario.getNombreUser() + " 😀!!!!! ");
                     new Menu(connection, usuario, gestorUsuario);

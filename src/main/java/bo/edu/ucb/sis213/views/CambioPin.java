@@ -1,4 +1,4 @@
-package bo.edu.ucb.sis213.screens;
+package bo.edu.ucb.sis213.views;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,8 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.sql.Connection;
-import bo.edu.ucb.sis213.GestorUsuario;
-import bo.edu.ucb.sis213.Usuario;
+
+import bo.edu.ucb.sis213.bl.UsuarioBl;
+import bo.edu.ucb.sis213.bl.GestorUsuario;
 
 public class CambioPin {
 
@@ -23,10 +24,10 @@ public class CambioPin {
     private JButton cancelButton;
     private JButton changeButton;
     private Connection connection;
-    private Usuario usuario;
+    private UsuarioBl usuario;
     private GestorUsuario gestorUsuario;
 
-    public CambioPin(Connection connection, Usuario usuario, GestorUsuario gestorUsuario) {
+    public CambioPin(Connection connection, UsuarioBl usuario, GestorUsuario gestorUsuario) {
         this.connection = connection;
         this.usuario = usuario;
         this.gestorUsuario = gestorUsuario;

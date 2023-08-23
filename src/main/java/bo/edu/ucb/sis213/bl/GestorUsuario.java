@@ -1,4 +1,4 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.bl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,7 +12,7 @@ public class GestorUsuario {
         this.connection = connection;
     }
 
-    public boolean validarPIN(Usuario usuario, int pinIngresado) {
+    public boolean validarPIN(UsuarioBl usuario, int pinIngresado) {
         //El usuario ingresa el pinIngresado
         String query = "SELECT id, saldo, nombre FROM usuarios WHERE pin = ?";
         try {
@@ -94,6 +94,10 @@ public class GestorUsuario {
             e.printStackTrace();
         }
         return false;
+    }
+    public static double consultarSaldo_UsuarioBl(UsuarioBl usuarioBl) {
+        double saldo=usuarioBl.getSaldo();
+        return saldo;
     }
 
 }

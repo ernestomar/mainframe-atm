@@ -1,7 +1,7 @@
-package bo.edu.ucb.sis213.screens;
+package bo.edu.ucb.sis213.views;
 
-import bo.edu.ucb.sis213.GestorUsuario;
-import bo.edu.ucb.sis213.Usuario;
+import bo.edu.ucb.sis213.bl.GestorUsuario;
+import bo.edu.ucb.sis213.bl.UsuarioBl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,10 +18,10 @@ public class Consulta {
     private JButton exitButton;
     private JButton anotherOperationButton;
     private Connection connection;
-    private Usuario usuario;
+    private UsuarioBl usuario;
     private GestorUsuario gestorUsuario;
 
-    public Consulta(Connection connection, Usuario usuario, GestorUsuario gestorUsuario) {
+    public Consulta(Connection connection, UsuarioBl usuario, GestorUsuario gestorUsuario) {
         this.connection = connection;
         this.usuario = usuario;
         this.gestorUsuario = gestorUsuario;
@@ -35,7 +35,7 @@ public class Consulta {
         frame.setVisible(true);
     }
 
-    private void initConsulta(Connection connection, Usuario usuario, GestorUsuario gestorUsuario) {
+    private void initConsulta(Connection connection, UsuarioBl usuario, GestorUsuario gestorUsuario) {
         consultaPanel = new JPanel(new GridBagLayout());
         Color bckg = new Color(0x0C0E9B);
         Color letras = new Color(0xF1E30A);

@@ -1,7 +1,7 @@
-package bo.edu.ucb.sis213.screens;
+package bo.edu.ucb.sis213.views;
 
-import bo.edu.ucb.sis213.GestorUsuario;
-import bo.edu.ucb.sis213.Usuario;
+import bo.edu.ucb.sis213.bl.GestorUsuario;
+import bo.edu.ucb.sis213.bl.UsuarioBl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,10 +16,10 @@ public class Menu {
     private JLabel welcomeLabel;
 
     private Connection connection;
-    private Usuario usuario;
+    private UsuarioBl usuario;
     private GestorUsuario gestorUsuario;
 
-    public Menu(Connection connection, Usuario usuario, GestorUsuario gestorUsuario) {
+    public Menu(Connection connection, UsuarioBl usuario, GestorUsuario gestorUsuario) {
         this.connection = connection;
         this.usuario = usuario;
         this.gestorUsuario = gestorUsuario;

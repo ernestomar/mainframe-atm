@@ -1,4 +1,4 @@
-package bo.edu.ucb.sis213.screens;
+package bo.edu.ucb.sis213.views;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,8 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.sql.Connection;
-import bo.edu.ucb.sis213.GestorUsuario;
-import bo.edu.ucb.sis213.Usuario;
+
+import bo.edu.ucb.sis213.bl.GestorUsuario;
+import bo.edu.ucb.sis213.bl.UsuarioBl;
 public class Retiros {
 
     private JFrame frame;
@@ -20,10 +21,10 @@ public class Retiros {
 
     private double retiro; // Simulación de saldo actual
     private Connection connection;
-    private Usuario usuario;
+    private UsuarioBl usuario;
     private GestorUsuario gestorUsuario;
 
-    public Retiros(Connection connection, Usuario usuario, GestorUsuario gestorUsuario) {
+    public Retiros(Connection connection, UsuarioBl usuario, GestorUsuario gestorUsuario) {
         frame = new JFrame("Retirar Saldo");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 400);

@@ -1,18 +1,18 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.bl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Usuario {
+public class UsuarioBl {
     private Connection connection;
     private int usuarioId;
     private double saldo;
     private int pinActual;
     private String nombreUser;
 
-    public Usuario(Connection connection, int usuarioId, double saldo, int pinActual, String nombreUser) {
+    public UsuarioBl(Connection connection, int usuarioId, double saldo, int pinActual, String nombreUser) {
         this.connection = connection;
         this.usuarioId = usuarioId;
         this.saldo = saldo;

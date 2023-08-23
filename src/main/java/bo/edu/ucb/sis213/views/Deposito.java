@@ -1,12 +1,13 @@
-package bo.edu.ucb.sis213.screens;
+package bo.edu.ucb.sis213.views;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
-import bo.edu.ucb.sis213.GestorUsuario;
-import bo.edu.ucb.sis213.Usuario;
+
+import bo.edu.ucb.sis213.bl.UsuarioBl;
+import bo.edu.ucb.sis213.bl.GestorUsuario;
 
 public class Deposito {
 
@@ -19,10 +20,10 @@ public class Deposito {
     private JButton cancelButton;
     private JButton depositButton;
     private Connection connection;
-    private Usuario usuario;
+    private UsuarioBl usuario;
     private GestorUsuario gestorUsuario;
 
-    public Deposito(Connection connection, Usuario usuario, GestorUsuario gestorUsuario) {
+    public Deposito(Connection connection, UsuarioBl usuario, GestorUsuario gestorUsuario) {
         this.connection = connection;
         this.usuario = usuario;
         this.gestorUsuario = gestorUsuario;
