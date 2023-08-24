@@ -8,12 +8,11 @@ import javax.swing.JOptionPane;
 
 import bo.edu.ucb.sis213.dao.HistoricoDao;
 import bo.edu.ucb.sis213.dao.UsuarioDao;
-import bo.edu.ucb.sis213.util.Exceptions;
 
 public class AtmBL {
     private UsuarioDao usuarioDao;
     private HistoricoDao historicoDao;
-    private Exceptions exception;
+    // private Exceptions util;
 
     private static int usuarioId;
     private int usuarioPin;
@@ -22,11 +21,13 @@ public class AtmBL {
     // private double saldo;
     // private Connection connection;
     private int intentosRestantes;
+    private String textoE="texto",tituloE="titulo";
 
     public AtmBL() {
         this.usuarioDao = new UsuarioDao();
         this.historicoDao = new HistoricoDao();
         intentosRestantes = 3;
+        //this.util = new Exceptions(textoE,tituloE,0);
         // usuarioId=usuarioDao.getUsuarioID(usuario, pin);
         // pin=usuarioDao.getUsuarioPIN(usuarioId);
         // nombre=usuarioDao.getUsuarioNombre(usuarioId);
@@ -38,8 +39,7 @@ public class AtmBL {
         usuarioNombre=null;
         System.out.println(usuarioId);
         
-    } 
-
+    }
     public double getSaldo(){
         return usuarioDao.getSaldo(usuarioId);
     }
@@ -54,62 +54,57 @@ public class AtmBL {
     }
     public int getIntentos(){
         return intentosRestantes;
+    } 
+    public String getTextoE(){
+        return textoE;
+    }
+    public String getTituloE(){
+        return tituloE;
     }
 
     public boolean validarLoginBL(String usuario, String pin){
-        if(validarUserBL(usuario, pin)==1){
+        if(validarUserBL(usuario, pin)){
             return true;
         }else{
-            return false;//return exception.Message(validarUserBL(usuario, pin));
+            if(intentosRestantes<=0){
+                System.exit(0);
+            }
+            return false;
         }
     }
 
-    // public boolean validarCampos(String str1, String str2){
-    //     if(usuario.isEmpty() && pin.isEmpty()){
-    //         // JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-    //         // exception.ExceptionMessage(0, "Ambos campos se encuentran vacios", "Campos vacios", 2);
-    //         return 4;
-    //     }else if(usuario.isEmpty()){
-    //         // JOptionPane.showMessageDialog(null, "Debe ingresar un usuario", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-    //         return 5;
-    //     }else if(pin.isEmpty()){
-    //         // JOptionPane.showMessageDialog(null, "Debe ingresar el PIN", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-    //         return 6;
-    //     }else if(usuario.isBlank() && pin.isBlank()){
-    //         // JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-    //         // exception.ExceptionMessage(0, "Ambos campos se encuentran vacios", "Campos vacios", 2);
-    //         return 4;
-    //     }else if(usuario.isBlank()){
-    //         // JOptionPane.showMessageDialog(null, "Debe ingresar un usuario", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-    //         return 5;
-    //     }else if(pin.isBlank()){
-    //         // JOptionPane.showMessageDialog(null, "Debe ingresar el PIN", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-    //         return 6;
-    //     }else{
-    //         return false;
-    //     }
-    // }
-    public int validarUserBL(String usuario, String pin) {
+    public boolean validarUserBL(String usuario, String pin) {
         if(usuario.isEmpty() && pin.isEmpty()){
+            textoE="Ambos campos se encuentran vacios";
+            tituloE="Campos vacios";
             // JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-            // exception.ExceptionMessage(0, "Ambos campos se encuentran vacios", "Campos vacios", 2);
-            return 4;
+            return false;
         }else if(usuario.isEmpty()){
             // JOptionPane.showMessageDialog(null, "Debe ingresar un usuario", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-            return 5;
+            textoE="Debe ingresar un usuario";
+            tituloE="Campos vacios";
+            return false;
         }else if(pin.isEmpty()){
             // JOptionPane.showMessageDialog(null, "Debe ingresar el PIN", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-            return 6;
+            textoE="Debe ingresar un PIN";
+            tituloE="Campos vacios";
+            return false;
         }else if(usuario.isBlank() && pin.isBlank()){
             // JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
             // exception.ExceptionMessage(0, "Ambos campos se encuentran vacios", "Campos vacios", 2);
-            return 4;
+            textoE="Ambos campos se encuntran vacios";
+            tituloE="Campos vacios";
+            return false;
         }else if(usuario.isBlank()){
             // JOptionPane.showMessageDialog(null, "Debe ingresar un usuario", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-            return 5;
+            textoE="Debe ingresar un usuario";
+            tituloE="Campos vacios";
+            return false;
         }else if(pin.isBlank()){
             // JOptionPane.showMessageDialog(null, "Debe ingresar el PIN", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-            return 6;
+            textoE="Debe ingresar un PIN";
+            tituloE="Campos vacios";
+            return false;
         }else{
             if(usuarioDao.getUsuarioID(usuario, Integer.parseInt(pin))>0){
                 usuarioId=usuarioDao.getUsuarioID(usuario, Integer.parseInt(pin));
@@ -118,19 +113,24 @@ public class AtmBL {
                 System.out.println(usuarioId);
                 usuarioSaldo=usuarioDao.getSaldo(usuarioId);
                 System.out.println("tamos aqui TT"+usuarioSaldo);
-                return 1;
+                return true;
             }else {
                 intentosRestantes--;
                 System.out.println("false"+intentosRestantes);
                 if (intentosRestantes > 0) {
                     System.out.println("PIN incorrecto. Le quedan " + intentosRestantes + " intentos.");//joption2
                     // JOptionPane.showMessageDialog(null, "PIN incorrecto. Le quedan " + intentosRestantes + " intentos.", "Error", JOptionPane.WARNING_MESSAGE);
-                    return 2;
+                    textoE="PIN incorrecto. Le quedan " + intentosRestantes + " intentos.";
+                    tituloE="Error";
+                    return false;
                 } else {
                     System.out.println("PIN incorrecto. Ha excedido el número de intento(s)."); //joption3
                     // JOptionPane.showMessageDialog(null, "PIN incorrecto. Ha excedido el n\u00FAmero de intentos.", "Error", JOptionPane.ERROR_MESSAGE);
-                    System.exit(0);
-                    return 3;
+                    
+                    textoE="PIN incorrecto. Ha excedido el numero de intentos.";
+                    tituloE="Error";
+                    // System.exit(0);
+                    return false;
                 }
             }
 
@@ -144,6 +144,8 @@ public class AtmBL {
         System.out.println("Esta entrando TT");
         if (cantidadStr.isEmpty() ) {
             // JOptionPane.showMessageDialog(null, "Debe ingresar un monto.", "Error", JOptionPane.WARNING_MESSAGE);
+            textoE="Debe ingresar un monto.";
+            tituloE="Error";
         }else{
             try {
                 System.out.println("Cantidad str"+cantidadStr);//joption4
@@ -151,18 +153,20 @@ public class AtmBL {
                 System.out.println("Cantidad no."+cantidad);//joption4
             } catch (Exception e) {
                 // JOptionPane.showMessageDialog(null, "Monto no num\u00E9rico", "Error", JOptionPane.ERROR_MESSAGE);
+                textoE="Monto no num\\u00E9rico";
+                tituloE="Error";
                 return false;
             }
             if (cantidad <= 0) {
                     System.out.println("Cantidad no válida.");//joption4
                     // JOptionPane.showMessageDialog(null, "Cantidad no v\u00E1lida.", "Error", JOptionPane.ERROR_MESSAGE);
+                    textoE="Cantidad no válida";
+                    tituloE="Error";
                 }else{
                 System.out.println(usuarioSaldo);//joption4
-                // System.out.println(getSaldo());//joption4
+                
                 System.out.println("\nDepósito==" + usuarioSaldo);//joption5
-                // int opdep = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de dep\u00F3sitar "+cantidadStr+" Bs. ?", "Confirmar", JOptionPane.YES_NO_OPTION);
-                // if (opdep == JOptionPane.YES_OPTION) {
-                    try {
+                try {
                         usuarioSaldo += cantidad;
                         usuarioDao.actualizarSaldo(usuarioSaldo,usuarioId);
                         historicoDao.registrarOperacion(usuarioId,"Deposito", cantidad);
@@ -174,10 +178,6 @@ public class AtmBL {
                         System.out.println("\nError al realizar el depósito.");
                         // JOptionPane.showMessageDialog(null, "Error al realizar el dep\u00F3sito.", "Error", JOptionPane.ERROR_MESSAGE);
                     } 
-                // }else if (opdep == JOptionPane.NO_OPTION) {
-                //     System.out.println("\nNo continuar con el deposito");
-                //     return false;
-                // }
                 }
         }
         return false;
@@ -188,24 +188,34 @@ public class AtmBL {
         System.out.println("Esta entrando a retiro TT");
         if(cantidadStr.isEmpty()){
             // JOptionPane.showMessageDialog(null, "Debe ingresar un monto.", "Error", JOptionPane.WARNING_MESSAGE);
+            textoE="Debe ingresar un monto.";
+            tituloE="Error";
+            return false;
         }else{
             try {
                 cantidad = Double.parseDouble(cantidadStr);
             } catch (Exception e) {
                 // JOptionPane.showMessageDialog(null, "Monto no num\u00E9rico", "Error", JOptionPane.ERROR_MESSAGE);
+                textoE="Monto no num\\u00E9rico";
+                tituloE="Error";
                 return false;
             }
             if (cantidad <= 0) {
                 // JOptionPane.showMessageDialog(null, "Cantidad no v\u00E1lida.", "Error", JOptionPane.ERROR_MESSAGE);
+                textoE="Cantidad no v\\u00E1lida.";
+                tituloE="Error";
+                return false;
             }else if(cantidad>usuarioSaldo){
             System.out.println("Saldo insuficiente.");
+                textoE="Saldo insuficiente";
+                tituloE="Error";
+                return false;
             // JOptionPane.showMessageDialog(null, "Saldo insuficiente.", "Error", JOptionPane.WARNING_MESSAGE);
             
         }else{
             return true;
         }
     }
-        return false;
     }
     
     public boolean realizarRetiro(String cantidadStr){
@@ -226,32 +236,6 @@ public class AtmBL {
                     }
     }
 
-    // public static void actualizarSaldo(Connection connection, double nuevoSaldo) throws SQLException {
-    //     String query = "UPDATE usuarios SET saldo = ? WHERE id = ?";
-    //     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-    //         preparedStatement.setDouble(1, nuevoSaldo);
-    //         preparedStatement.setInt(2, usuarioId);
-    //         preparedStatement.executeUpdate();
-    //     }catch (SQLException ex) {
-    //         System.out.println("Error al actualizar el saldo.");
-    //         JOptionPane.showMessageDialog(null, "Error al actualizar el saldo.", "Error", JOptionPane.ERROR_MESSAGE);
-    //         ex.printStackTrace();
-    //     }
-    // }
-    
-    // public static void registrarOperacion(Connection connection, String tipoOperacion, double cantidad) throws SQLException {
-    //     String insertQuery = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, ?, ?)";
-    //     try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
-    //         insertStatement.setInt(1, usuarioId);
-    //         insertStatement.setString(2, tipoOperacion);
-    //         insertStatement.setDouble(3, cantidad);
-    //         insertStatement.executeUpdate();
-    //     }catch (SQLException ex) {
-    //         System.out.println("Error al registrar la operación.");
-    //         JOptionPane.showMessageDialog(null, "Error al registrar la operaci\u00F3n.", "Error", JOptionPane.ERROR_MESSAGE);
-    //         ex.printStackTrace();
-    //     }
-    // }  
     public boolean validarPIN(String pinStr){
         int pin=Integer.parseInt(pinStr);
         if(pin==getPin()){
@@ -262,15 +246,6 @@ public class AtmBL {
     }
 
     public boolean validarCambioPIN(String newPINStr, String confirmPINStr) throws SQLException {
-        // String nuevoPinStr = String.valueOf(nuevoPinField.getPassword());
-        // String confirmarNuevoPinStr = String.valueOf(confirmarPinField.getPassword());
-
-        // if (newPINStr.isEmpty() || confirmPINStr.isEmpty()) {
-        //     // JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
-        //     return false;
-        // }else{
-
-        // }
         if(newPINStr.isEmpty() && confirmPINStr.isEmpty()){
             // JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
             // exception.ExceptionMessage(0, "Ambos campos se encuentran vacios", "Campos vacios", 2);

@@ -19,10 +19,12 @@ public class LoginView {
     private JButton loginButton;
     private JFrame frame;
     private AtmBL bl2=null;
+    // private Exceptions util;
 
 
     public LoginView(AtmBL bl) {
         // this.controller = new App(connection);
+        // this.util = new Exceptions();
         bl2=bl;
         frame = new JFrame("ATM App");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,18 +51,18 @@ public class LoginView {
                 try {
                     String user = userField.getText();
                     String pin=new String(pinField.getPassword());
-                    // bl= new AtmBL();
-                    // if (bl.validarLoginBL(user, pin)) {
                     if (bl2.validarLoginBL(user, pin)) {
                         close();
-                        // menuView = new MenuView(connection, usuario);//controññer
                         new MenuView(bl2);
                         System.out.println("ABRIMOS MENU :D");
                     }else{
+                        JOptionPane.showMessageDialog(frame, bl2.getTextoE(), bl2.getTituloE(), JOptionPane.WARNING_MESSAGE);
+                        // JOptionPane.showMessageDialog(frame, util.getTexto(), util.getTitulo(), JOptionPane.WARNING_MESSAGE);
                         return;
                     }
                 } catch (Exception ex) {
-                    // TODO: handle exception
+                    // JOptionPane.showMessageDialog(null, ex.getMessage());
+                    JOptionPane.showMessageDialog(frame, "Campos no v\u00E1lidos", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
