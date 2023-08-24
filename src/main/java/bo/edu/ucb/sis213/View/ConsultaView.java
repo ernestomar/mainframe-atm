@@ -12,12 +12,10 @@ public class ConsultaView {
     private JFrame frame;
     private JLabel saldoLabel;
     private JButton aceptarButton;
+    private double saldo;
 
-    // private AtmBL bl;
-    // private double saldo= bl.obtenerSaldoBL();
-
-    public ConsultaView() {
-        // saldo = bl.obtenerSaldoBL();
+    public ConsultaView(AtmBL bl) {
+        saldo = bl.getSaldo();
 
         frame = new JFrame("Consulta de Saldo");
         frame.getContentPane().setBackground(new Color(0, 139, 139));
@@ -25,7 +23,7 @@ public class ConsultaView {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
-        // saldoLabel = new JLabel("Su saldo actual es: " +saldo+" Bs.");
+        saldoLabel = new JLabel("Su saldo actual es: " +saldo+" Bs.");
         saldoLabel.setForeground(new Color(255, 255, 255));
         saldoLabel.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 30));
         saldoLabel.setBounds(0, 10, 536, 208);

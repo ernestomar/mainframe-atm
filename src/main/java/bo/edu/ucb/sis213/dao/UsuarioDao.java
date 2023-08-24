@@ -25,7 +25,7 @@ public class UsuarioDao {
 
     public int getUsuarioID(String alias, int pin){
         int id=-1;
-        String query = "SELECT pin FROM usuarios WHERE alias = ? AND pin = ?";
+        String query = "SELECT id FROM usuarios WHERE alias = ? AND pin = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, alias);
@@ -33,7 +33,7 @@ public class UsuarioDao {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                id= resultSet.getInt("pin");
+                id= resultSet.getInt("id");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -85,6 +85,8 @@ public class UsuarioDao {
 
             if (resultSet.next()) {
                 saldo= resultSet.getDouble("saldo");
+                System.out.println(saldo);
+                return saldo;
             }
         } catch (SQLException e) {
             e.printStackTrace();

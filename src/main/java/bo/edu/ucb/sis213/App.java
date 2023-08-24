@@ -3,6 +3,7 @@ package bo.edu.ucb.sis213;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import bo.edu.ucb.sis213.bl.AtmBL;
 import bo.edu.ucb.sis213.dao.Conecction;
 import bo.edu.ucb.sis213.view.LoginView;
 
@@ -17,8 +18,8 @@ public class App {
         //     ex.printStackTrace();
         //     System.exit(1);
         // }
-
-        LoginView loginView = new LoginView();
+        AtmBL bl=new AtmBL();
+        LoginView loginView = new LoginView(bl);
         // loginView.setVisible(true);
     }
 }

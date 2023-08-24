@@ -18,11 +18,12 @@ public class LoginView {
     private JPasswordField pinField;
     private JButton loginButton;
     private JFrame frame;
-    private AtmBL bl=null;
+    private AtmBL bl2=null;
 
 
-    public LoginView() {
+    public LoginView(AtmBL bl) {
         // this.controller = new App(connection);
+        bl2=bl;
         frame = new JFrame("ATM App");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(703, 450);
@@ -48,11 +49,12 @@ public class LoginView {
                 try {
                     String user = userField.getText();
                     String pin=new String(pinField.getPassword());
-                    bl= new AtmBL(user, Integer.parseInt(pin));
-                    if (bl.validarLoginBL(user, pin)) {
+                    // bl= new AtmBL();
+                    // if (bl.validarLoginBL(user, pin)) {
+                    if (bl2.validarLoginBL(user, pin)) {
                         close();
                         // menuView = new MenuView(connection, usuario);//controññer
-                        new MenuView(user);
+                        new MenuView(bl2);
                         System.out.println("ABRIMOS MENU :D");
                     }else{
                         return;

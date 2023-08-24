@@ -23,18 +23,18 @@ public class MenuView {
     private Controller controller;
     private JButton btnNewButton;
 
-    public MenuView(String username) {
+    public MenuView(AtmBL bl) {
         // this.controller = new Controller(connection);
         frame = new JFrame("ATM App - Menú Principal");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(868, 526);
 
-        initMainMenu(username);
+        initMainMenu(bl.getNombre(),bl);
 
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
     }
-    private void initMainMenu(String username) {
+    private void initMainMenu(String username, AtmBL bl) {
         mainMenuPanel = new JPanel();
         mainMenuPanel.setBorder(new LineBorder(new Color(0, 139, 139), 0, true));
         mainMenuPanel.setBackground(new Color(15, 15, 112));
@@ -74,7 +74,7 @@ public class MenuView {
         checkBalanceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ConsultaView();
+                new ConsultaView(bl);
             }
         });
 
@@ -106,7 +106,7 @@ public class MenuView {
                 int oplogout = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de cerrar su sesión ?", "Confirmar", JOptionPane.YES_NO_OPTION);
                 if (oplogout == JOptionPane.YES_OPTION) {
                     close();
-                    new LoginView();
+                    new LoginView(bl);
                 }else{
                     return;
                 }

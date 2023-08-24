@@ -16,22 +16,45 @@ public class AtmBL {
     private Exceptions exception;
 
     private static int usuarioId;
-    private int pin;
-    private String nombre;
-    private double saldo;
+    private int usuarioPin;
+    private String usuarioNombre;
+    private double usuarioSaldo;
     // private double saldo;
     // private Connection connection;
     private int intentosRestantes;
 
-    public AtmBL(String usuario, int pin) {
+    public AtmBL() {
         this.usuarioDao = new UsuarioDao();
         this.historicoDao = new HistoricoDao();
         intentosRestantes = 3;
-        usuarioId=usuarioDao.getUsuarioID(usuario, pin);
-        pin=usuarioDao.getUsuarioPIN(usuarioId);
-        nombre=usuarioDao.getUsuarioNombre(usuarioId);
-        saldo=usuarioDao.getSaldo(usuarioId);
+        // usuarioId=usuarioDao.getUsuarioID(usuario, pin);
+        // pin=usuarioDao.getUsuarioPIN(usuarioId);
+        // nombre=usuarioDao.getUsuarioNombre(usuarioId);
+        // System.out.println(usuarioId);
+        // saldo=usuarioDao.getSaldo(usuarioId);
+        usuarioSaldo=0;
+        usuarioId=0;
+        usuarioPin=0;
+        usuarioNombre=null;
+        System.out.println(usuarioId);
+        
     } 
+
+    public double getSaldo(){
+        return usuarioSaldo;
+    }
+    public String getNombre(){
+        return usuarioNombre;
+    }
+    public int getPin(){
+        return usuarioPin;
+    }
+    public int getID(){
+        return usuarioId;
+    }
+    public int getIntentos(){
+        return intentosRestantes;
+    }
 
     public boolean validarLoginBL(String usuario, String pin){
         if(validarUserBL(usuario, pin)==1){
@@ -64,6 +87,12 @@ public class AtmBL {
             return 6;
         }else{
             if(usuarioDao.getUsuarioID(usuario, Integer.parseInt(pin))>0){
+                usuarioId=usuarioDao.getUsuarioID(usuario, Integer.parseInt(pin));
+                usuarioPin=usuarioDao.getUsuarioPIN(usuarioId);
+                usuarioNombre=usuarioDao.getUsuarioNombre(usuarioId);
+                System.out.println(usuarioId);
+                usuarioSaldo=usuarioDao.getSaldo(usuarioId);
+                System.out.println("tamos aqui TT"+usuarioSaldo);
                 return 1;
             }else {
                 intentosRestantes--;
@@ -123,9 +152,7 @@ public class AtmBL {
     //     return 0.0; // Retornar un valor por defecto en caso de error
     // }
 
-    public double obtenerSaldoBL(){
-        return usuarioDao.getSaldo(usuarioId);
-    }
+    
 
     public boolean realizarDeposito(String cantidadStr) {
         double cantidad=0;
@@ -145,17 +172,17 @@ public class AtmBL {
                     System.out.println("Cantidad no válida.");//joption4
                     JOptionPane.showMessageDialog(null, "Cantidad no v\u00E1lida.", "Error", JOptionPane.ERROR_MESSAGE);
                 }else{
-                System.out.println(saldo);//joption4
+                System.out.println(usuarioSaldo);//joption4
                 // System.out.println(getSaldo());//joption4
-                System.out.println("\nDepósito==" + saldo);//joption5
+                System.out.println("\nDepósito==" + usuarioSaldo);//joption5
                 int opdep = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de dep\u00F3sitar "+cantidadStr+" Bs. ?", "Confirmar", JOptionPane.YES_NO_OPTION);
                 if (opdep == JOptionPane.YES_OPTION) {
                     try {
-                        saldo += cantidad;
+                        usuarioSaldo += cantidad;
                         // actualizarSaldo(connection, saldo);
                         // registrarOperacion(connection, "Deposito", cantidad);
-                        System.out.println("\nDepósito realizado con éxito. Su nuevo saldo es: $" + saldo);//joption5
-                        JOptionPane.showMessageDialog(null, "Dep\u00F3sito realizado con \u00E9xito. Su nuevo saldo es: " + saldo+" Bs.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        System.out.println("\nDepósito realizado con éxito. Su nuevo saldo es: $" + usuarioSaldo);//joption5
+                        JOptionPane.showMessageDialog(null, "Dep\u00F3sito realizado con \u00E9xito. Su nuevo saldo es: " + usuarioSaldo+" Bs.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                         return true;
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -185,19 +212,19 @@ public class AtmBL {
             }
             if (cantidad <= 0) {
                 JOptionPane.showMessageDialog(null, "Cantidad no v\u00E1lida.", "Error", JOptionPane.ERROR_MESSAGE);
-            }else if(cantidad>saldo){
+            }else if(cantidad>usuarioSaldo){
             System.out.println("Saldo insuficiente.");
             JOptionPane.showMessageDialog(null, "Saldo insuficiente.", "Error", JOptionPane.WARNING_MESSAGE);
         }else{
             int opre = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de retirar "+cantidadStr+" Bs. ?", "Confirmar", JOptionPane.YES_NO_OPTION);
                 if (opre == JOptionPane.YES_OPTION) {
-                    saldo -= cantidad;
-                    System.out.println("\nDepósito==" + saldo);
+                    usuarioSaldo -= cantidad;
+                    System.out.println("\nDepósito==" + usuarioSaldo);
                     try {
                         // actualizarSaldo(connection, saldo); 
                         // registrarOperacion(connection, "Retiro", -cantidad); 
-                        System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + saldo);
-                        JOptionPane.showMessageDialog(null, "Retiro realizado con \u00E9xito. Su nuevo saldo es: " + saldo+" Bs.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + usuarioSaldo);
+                        JOptionPane.showMessageDialog(null, "Retiro realizado con \u00E9xito. Su nuevo saldo es: " + usuarioSaldo+" Bs.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                         return true;
                     } catch (Exception ex) {
                         System.out.println("Error al realizar el retiro.");
