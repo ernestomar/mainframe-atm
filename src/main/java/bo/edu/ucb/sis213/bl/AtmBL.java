@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 
 import bo.edu.ucb.sis213.dao.HistoricoDao;
 import bo.edu.ucb.sis213.dao.UsuarioDao;
-import bo.edu.ucb.sis213.until.Exceptions;
+import bo.edu.ucb.sis213.util.Exceptions;
 
 public class AtmBL {
     private UsuarioDao usuarioDao;

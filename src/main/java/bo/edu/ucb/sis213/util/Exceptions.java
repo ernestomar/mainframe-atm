@@ -1,4 +1,4 @@
-package bo.edu.ucb.sis213.until;
+package bo.edu.ucb.sis213.util;
 
 import javax.swing.JOptionPane;
 
