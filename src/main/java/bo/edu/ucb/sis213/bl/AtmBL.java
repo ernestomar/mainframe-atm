@@ -14,7 +14,8 @@ public class AtmBL {
     private String usuarioNombre;
     private double usuarioSaldo;
     private int intentosRestantes;
-    private String textoE="texto",tituloE="titulo";
+    private String textoE;
+    private String tituloE;
 
     public AtmBL() {
         this.usuarioDao = new UsuarioDao();
@@ -24,6 +25,8 @@ public class AtmBL {
         usuarioId=0;
         usuarioPin=0;
         usuarioNombre=null;
+        textoE="texto";
+        tituloE="titulo";
         System.out.println(usuarioId);
         
     }
@@ -245,7 +248,7 @@ public class AtmBL {
             return false;
         }else if(newPINStr.isEmpty()){
             // JOptionPane.showMessageDialog(null, "Debe ingresar un usuario", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-            textoE="Debe ingresar un usuario";
+            textoE="Debe ingresar un PIN";
             tituloE="Campos Vacios";
             return false;
         }else if(confirmPINStr.isEmpty()){
