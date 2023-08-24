@@ -1,6 +1,6 @@
 package bo.edu.ucb.sis213.views;
 
-import bo.edu.ucb.sis213.bl.GestorUsuario;
+import bo.edu.ucb.sis213.bl.GestorUsuarioBl;
 import bo.edu.ucb.sis213.bl.UsuarioBl;
 
 import javax.swing.*;
@@ -18,24 +18,22 @@ public class Consulta {
     private JButton exitButton;
     private JButton anotherOperationButton;
     private Connection connection;
-    private UsuarioBl usuario;
-    private GestorUsuario gestorUsuario;
+    private GestorUsuarioBl gestorUsuario;
 
-    public Consulta(Connection connection, UsuarioBl usuario, GestorUsuario gestorUsuario) {
+    public Consulta(Connection connection, GestorUsuarioBl gestorUsuario) {
         this.connection = connection;
-        this.usuario = usuario;
         this.gestorUsuario = gestorUsuario;
 
         frame = new JFrame("Consulta de Saldo");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 400);
 
-        initConsulta(connection, usuario, gestorUsuario);
+        initConsulta(connection, gestorUsuario);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    private void initConsulta(Connection connection, UsuarioBl usuario, GestorUsuario gestorUsuario) {
+    private void initConsulta(Connection connection, GestorUsuarioBl gestorUsuario) {
         consultaPanel = new JPanel(new GridBagLayout());
         Color bckg = new Color(0x0C0E9B);
         Color letras = new Color(0xF1E30A);
@@ -54,7 +52,7 @@ public class Consulta {
         consultaPanel.add(nameLabel, constraints);
 
         // Simular un saldo cualquiera
-        balanceLabel = new JLabel("Saldo: Bs"+usuario.getSaldo());
+        balanceLabel = new JLabel("Saldo: Bs"+gestorUsuario.consultarSaldo_UsuarioBl());
         balanceLabel.setForeground(letras);
         constraints.gridy = 1;
         consultaPanel.add(balanceLabel, constraints);

@@ -1,12 +1,10 @@
 package bo.edu.ucb.sis213.views;
 
-import bo.edu.ucb.sis213.bl.GestorUsuario;
+import bo.edu.ucb.sis213.bl.GestorUsuarioBl;
 import bo.edu.ucb.sis213.bl.UsuarioBl;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 
 public class Menu {
@@ -17,11 +15,10 @@ public class Menu {
 
     private Connection connection;
     private UsuarioBl usuario;
-    private GestorUsuario gestorUsuario;
+    private GestorUsuarioBl gestorUsuario;
 
-    public Menu(Connection connection, UsuarioBl usuario, GestorUsuario gestorUsuario) {
+    public Menu(Connection connection, UsuarioBl usuario, GestorUsuarioBl gestorUsuario) {
         this.connection = connection;
-        this.usuario = usuario;
         this.gestorUsuario = gestorUsuario;
 
         frame = new JFrame("ATM Menu");
@@ -83,19 +80,19 @@ public class Menu {
         int userid = 1;
         switch (buttonText) {
             case "Consultar Saldo":
-                new Consulta(connection, usuario, gestorUsuario);
+                new Consulta(connection, gestorUsuario);
                 // Agregar lógica para consultar saldo
                 break;
             case "Realizar Depósito":
-                new Deposito(connection, usuario, gestorUsuario);
+                new Deposito(connection, gestorUsuario);
                 // Agregar lógica para realizar depósito
                 break;
             case "Realizar Retiro":
-                new Retiros(connection, usuario, gestorUsuario);
+                new Retiros(connection, gestorUsuario);
                 // Agregar lógica para realizar retiro
                 break;
             case "Cambiar PIN":
-                new CambioPin(connection, usuario, gestorUsuario);
+                new CambioPin(connection, gestorUsuario);
                 // Agregar lógica para cambiar PIN
                 break;
             case "Salir":

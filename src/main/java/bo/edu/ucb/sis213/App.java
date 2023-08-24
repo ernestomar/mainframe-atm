@@ -1,19 +1,11 @@
 package bo.edu.ucb.sis213;
 
-import bo.edu.ucb.sis213.bl.GestorUsuario;
 import bo.edu.ucb.sis213.bl.UsuarioBl;
 import bo.edu.ucb.sis213.dao.ConexionDao;
 import bo.edu.ucb.sis213.views.Login;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.Scanner;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 public class App {
     public static void main(String[] args) {

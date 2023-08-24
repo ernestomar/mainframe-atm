@@ -1,5 +1,7 @@
 package bo.edu.ucb.sis213.bl;
 
+import bo.edu.ucb.sis213.dao.UsuarioDao;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +13,7 @@ public class UsuarioBl {
     private double saldo;
     private int pinActual;
     private String nombreUser;
+    private UsuarioDao usuarioDao;
 
     public UsuarioBl(Connection connection, int usuarioId, double saldo, int pinActual, String nombreUser) {
         this.connection = connection;

@@ -5,9 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import bo.edu.ucb.sis213.bl.GestorUsuario;
 import bo.edu.ucb.sis213.bl.UsuarioBl;
-import bo.edu.ucb.sis213.dao.HistoricoDao;
 
 public class UsuarioDao {
     private Connection connection;
@@ -23,6 +21,7 @@ public class UsuarioDao {
                 usuarioBl.setUsuarioId(resultSet.getInt("id"));
                 usuarioBl.setSaldo(resultSet.getDouble("saldo"));
                 usuarioBl.setNombreUser(resultSet.getString("nombre"));
+                usuarioBl.setPinActual(resultSet.getInt("pin"));
                 return true;
             }
         } catch (SQLException e) {

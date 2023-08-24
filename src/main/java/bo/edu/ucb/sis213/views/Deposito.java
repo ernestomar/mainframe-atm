@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 
 import bo.edu.ucb.sis213.bl.UsuarioBl;
-import bo.edu.ucb.sis213.bl.GestorUsuario;
+import bo.edu.ucb.sis213.bl.GestorUsuarioBl;
 
 public class Deposito {
 
@@ -20,12 +20,10 @@ public class Deposito {
     private JButton cancelButton;
     private JButton depositButton;
     private Connection connection;
-    private UsuarioBl usuario;
-    private GestorUsuario gestorUsuario;
+    private GestorUsuarioBl gestorUsuario;
 
-    public Deposito(Connection connection, UsuarioBl usuario, GestorUsuario gestorUsuario) {
+    public Deposito(Connection connection, GestorUsuarioBl gestorUsuario) {
         this.connection = connection;
-        this.usuario = usuario;
         this.gestorUsuario = gestorUsuario;
 
         frame = new JFrame("Depósito");
@@ -107,7 +105,7 @@ public class Deposito {
                     JOptionPane.showMessageDialog(frame, "Cantidad no válida", "Error", JOptionPane.ERROR_MESSAGE);
                 }
                 else{
-                    boolean flag = gestorUsuario.realizarDeposito(usuario.getUsuarioId(), usuario.getSaldo(), depositAmount);
+                    boolean flag = gestorUsuario.realizarDeposito_UsuarioBl(depositAmount);
                     if(flag){
                         JPanel confirmacionPanel = new JPanel(new FlowLayout());
                         confirmacionPanel.setBackground(bckg);

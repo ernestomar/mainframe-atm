@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 
 import bo.edu.ucb.sis213.bl.UsuarioBl;
-import bo.edu.ucb.sis213.bl.GestorUsuario;
+import bo.edu.ucb.sis213.bl.GestorUsuarioBl;
 
 public class CambioPin {
 
@@ -25,11 +25,10 @@ public class CambioPin {
     private JButton changeButton;
     private Connection connection;
     private UsuarioBl usuario;
-    private GestorUsuario gestorUsuario;
+    private GestorUsuarioBl gestorUsuario;
 
-    public CambioPin(Connection connection, UsuarioBl usuario, GestorUsuario gestorUsuario) {
+    public CambioPin(Connection connection, GestorUsuarioBl gestorUsuario) {
         this.connection = connection;
-        this.usuario = usuario;
         this.gestorUsuario = gestorUsuario;
 
         frame = new JFrame("Cambio de PIN");
@@ -126,7 +125,7 @@ public class CambioPin {
                 if (newPassword.equals(confirmNewPassword)) {
                     if(currentPassword.equals(usuario.getPinActual())){
                         int nuevoPin = Integer.parseInt(newPassword);
-                        boolean flag = gestorUsuario.cambiarPIN(usuario.getUsuarioId(),nuevoPin);
+                        boolean flag = gestorUsuario.cambiarPIN_UsuarioBl(nuevoPin);
                         if(flag){
                             showSuccessScreen();
                         }

@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 
 import java.sql.Connection;
 
-import bo.edu.ucb.sis213.bl.GestorUsuario;
+import bo.edu.ucb.sis213.bl.GestorUsuarioBl;
 import bo.edu.ucb.sis213.bl.UsuarioBl;
 public class Retiros {
 
@@ -22,9 +22,9 @@ public class Retiros {
     private double retiro; // Simulación de saldo actual
     private Connection connection;
     private UsuarioBl usuario;
-    private GestorUsuario gestorUsuario;
+    private GestorUsuarioBl gestorUsuario;
 
-    public Retiros(Connection connection, UsuarioBl usuario, GestorUsuario gestorUsuario) {
+    public Retiros(Connection connection, GestorUsuarioBl gestorUsuario) {
         frame = new JFrame("Retirar Saldo");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 400);
@@ -115,7 +115,7 @@ public class Retiros {
                 JOptionPane.showMessageDialog(frame, "Saldo insuficiente", "Error", JOptionPane.ERROR_MESSAGE);
             }
             else{
-                boolean flag=gestorUsuario.realizarRetiro(usuario.getUsuarioId(), usuario.getSaldo(), amount);
+                boolean flag=gestorUsuario.realizarRetiro_UsuarioBl(amount);
                 if(flag){
                     performWithdraw(amount);
                 }
@@ -196,7 +196,7 @@ public class Retiros {
                     JOptionPane.showMessageDialog(frame, "Saldo insuficiente", "Error", JOptionPane.ERROR_MESSAGE);
                 }
                 else{
-                    boolean flag=gestorUsuario.realizarRetiro(usuario.getUsuarioId(), usuario.getSaldo(), Amount);
+                    boolean flag=gestorUsuario.realizarRetiro_UsuarioBl(Amount);
                     if(flag){
                         otherWithdrawFrame.dispose(); // Cerrar la ventana de retiro personalizado
                         performWithdraw(Amount); // Ir a la pantalla de confirmación
