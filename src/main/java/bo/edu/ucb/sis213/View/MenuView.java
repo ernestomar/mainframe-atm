@@ -81,20 +81,36 @@ public class MenuView {
         depositButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // controller.mostrarDepositoView();
+                new DepositoView(bl);
             }
         });
         
         withdrawButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // controller.mostrarRetiroView();
+                new RetiroView(bl);
             }
         });
 
         changePinButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JPasswordField pinField = new JPasswordField();
+                int option = JOptionPane.showConfirmDialog(null, pinField, "Ingrese su PIN", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                if (option == JOptionPane.OK_OPTION) {
+                    try {
+                        String pinStr=String.valueOf(pinField.getPassword());
+                        if(bl.validarPIN(pinStr)){
+                            new CambiarPinView(bl);
+                        }else{
+                            JOptionPane.showMessageDialog(null, "PIN incorrecto", "Error", JOptionPane.CANCEL_OPTION);
+                        }
+                    } catch (Exception e2) {
+                        JOptionPane.showMessageDialog(null, "PIN incorrecto.", "Error", JOptionPane.CANCEL_OPTION);
+                    }
+                }else{
+                    return;
+                }
                 // controller.validarPIN(2, frame);
                 
             }

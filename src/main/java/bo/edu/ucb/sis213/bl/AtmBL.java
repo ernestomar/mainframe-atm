@@ -41,16 +41,16 @@ public class AtmBL {
     } 
 
     public double getSaldo(){
-        return usuarioSaldo;
+        return usuarioDao.getSaldo(usuarioId);
     }
     public String getNombre(){
-        return usuarioNombre;
+        return usuarioDao.getUsuarioNombre(usuarioId);
     }
     public int getPin(){
-        return usuarioPin;
+        return usuarioDao.getUsuarioPIN(usuarioId);
     }
     public int getID(){
-        return usuarioId;
+        return usuarioDao.getUsuarioID(usuarioNombre, usuarioPin);
     }
     public int getIntentos(){
         return intentosRestantes;
@@ -64,6 +64,31 @@ public class AtmBL {
         }
     }
 
+    // public boolean validarCampos(String str1, String str2){
+    //     if(usuario.isEmpty() && pin.isEmpty()){
+    //         // JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+    //         // exception.ExceptionMessage(0, "Ambos campos se encuentran vacios", "Campos vacios", 2);
+    //         return 4;
+    //     }else if(usuario.isEmpty()){
+    //         // JOptionPane.showMessageDialog(null, "Debe ingresar un usuario", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+    //         return 5;
+    //     }else if(pin.isEmpty()){
+    //         // JOptionPane.showMessageDialog(null, "Debe ingresar el PIN", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+    //         return 6;
+    //     }else if(usuario.isBlank() && pin.isBlank()){
+    //         // JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+    //         // exception.ExceptionMessage(0, "Ambos campos se encuentran vacios", "Campos vacios", 2);
+    //         return 4;
+    //     }else if(usuario.isBlank()){
+    //         // JOptionPane.showMessageDialog(null, "Debe ingresar un usuario", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+    //         return 5;
+    //     }else if(pin.isBlank()){
+    //         // JOptionPane.showMessageDialog(null, "Debe ingresar el PIN", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+    //         return 6;
+    //     }else{
+    //         return false;
+    //     }
+    // }
     public int validarUserBL(String usuario, String pin) {
         if(usuario.isEmpty() && pin.isEmpty()){
             // JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
@@ -103,140 +128,102 @@ public class AtmBL {
                     return 2;
                 } else {
                     System.out.println("PIN incorrecto. Ha excedido el número de intento(s)."); //joption3
-                    JOptionPane.showMessageDialog(null, "PIN incorrecto. Ha excedido el n\u00FAmero de intentos.", "Error", JOptionPane.ERROR_MESSAGE);
+                    // JOptionPane.showMessageDialog(null, "PIN incorrecto. Ha excedido el n\u00FAmero de intentos.", "Error", JOptionPane.ERROR_MESSAGE);
                     System.exit(0);
                     return 3;
                 }
             }
 
-            // if (resultSet.next()) {
-            //     usuarioId = resultSet.getInt("id");
-            //     System.out.println("truee"+intentosRestantes);
-            //     intentosRestantes = 3; // Reiniciar los intentos restantes
-            //     System.out.println("truee"+intentosRestantes);
-            //     JOptionPane.showMessageDialog(null, "PIN correcto", "Acceso permitido", JOptionPane.INFORMATION_MESSAGE);
-            //     return true;
-            // } else {
-            //     intentosRestantes--;
-            //     System.out.println("false"+intentosRestantes);
-            //     if (intentosRestantes > 0) {
-            //         System.out.println("PIN incorrecto. Le quedan " + intentosRestantes + " intentos.");//joption2
-            //         JOptionPane.showMessageDialog(null, "PIN incorrecto. Le quedan " + intentosRestantes + " intentos.", "Error", JOptionPane.WARNING_MESSAGE);
-            //         // return false;
-            //     } else {
-            //         System.out.println("PIN incorrecto. Ha excedido el número de intento(s)."); //joption3
-            //         JOptionPane.showMessageDialog(null, "PIN incorrecto. Ha excedido el n\u00FAmero de intentos.", "Error", JOptionPane.ERROR_MESSAGE);
-            //         System.exit(0);
-            //     }
-            //     return false;
-            // }
-        
+                    
         }
         // return false;
     }
-
-    // public double getSaldo() {
-    //     String query = "SELECT saldo FROM usuarios WHERE id = ?";
-    //     try {
-    //         PreparedStatement preparedStatement = connection.prepareStatement(query);
-    //         preparedStatement.setInt(1, usuarioId);
-    //         ResultSet resultSet = preparedStatement.executeQuery();
-
-    //         if (resultSet.next()) {
-    //             return resultSet.getDouble("saldo");
-    //         }
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //         JOptionPane.showMessageDialog(null, "Error al obtener saldo."+e, "Error", JOptionPane.ERROR_MESSAGE);
-    //     }
-    //     return 0.0; // Retornar un valor por defecto en caso de error
-    // }
-
-    
 
     public boolean realizarDeposito(String cantidadStr) {
         double cantidad=0;
         System.out.println("Esta entrando TT");
         if (cantidadStr.isEmpty() ) {
-            JOptionPane.showMessageDialog(null, "Debe ingresar un monto.", "Error", JOptionPane.WARNING_MESSAGE);
+            // JOptionPane.showMessageDialog(null, "Debe ingresar un monto.", "Error", JOptionPane.WARNING_MESSAGE);
         }else{
             try {
                 System.out.println("Cantidad str"+cantidadStr);//joption4
                 cantidad = Double.parseDouble(cantidadStr);
                 System.out.println("Cantidad no."+cantidad);//joption4
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Monto no num\u00E9rico", "Error", JOptionPane.ERROR_MESSAGE);
+                // JOptionPane.showMessageDialog(null, "Monto no num\u00E9rico", "Error", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
             if (cantidad <= 0) {
                     System.out.println("Cantidad no válida.");//joption4
-                    JOptionPane.showMessageDialog(null, "Cantidad no v\u00E1lida.", "Error", JOptionPane.ERROR_MESSAGE);
+                    // JOptionPane.showMessageDialog(null, "Cantidad no v\u00E1lida.", "Error", JOptionPane.ERROR_MESSAGE);
                 }else{
                 System.out.println(usuarioSaldo);//joption4
                 // System.out.println(getSaldo());//joption4
                 System.out.println("\nDepósito==" + usuarioSaldo);//joption5
-                int opdep = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de dep\u00F3sitar "+cantidadStr+" Bs. ?", "Confirmar", JOptionPane.YES_NO_OPTION);
-                if (opdep == JOptionPane.YES_OPTION) {
+                // int opdep = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de dep\u00F3sitar "+cantidadStr+" Bs. ?", "Confirmar", JOptionPane.YES_NO_OPTION);
+                // if (opdep == JOptionPane.YES_OPTION) {
                     try {
                         usuarioSaldo += cantidad;
-                        // actualizarSaldo(connection, saldo);
-                        // registrarOperacion(connection, "Deposito", cantidad);
+                        usuarioDao.actualizarSaldo(usuarioSaldo,usuarioId);
+                        historicoDao.registrarOperacion(usuarioId,"Deposito", cantidad);
                         System.out.println("\nDepósito realizado con éxito. Su nuevo saldo es: $" + usuarioSaldo);//joption5
-                        JOptionPane.showMessageDialog(null, "Dep\u00F3sito realizado con \u00E9xito. Su nuevo saldo es: " + usuarioSaldo+" Bs.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        // JOptionPane.showMessageDialog(null, "Dep\u00F3sito realizado con \u00E9xito. Su nuevo saldo es: " + usuarioSaldo+" Bs.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                         return true;
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         System.out.println("\nError al realizar el depósito.");
-                        JOptionPane.showMessageDialog(null, "Error al realizar el dep\u00F3sito.", "Error", JOptionPane.ERROR_MESSAGE);
+                        // JOptionPane.showMessageDialog(null, "Error al realizar el dep\u00F3sito.", "Error", JOptionPane.ERROR_MESSAGE);
                     } 
-                }else if (opdep == JOptionPane.NO_OPTION) {
-                    System.out.println("\nNo continuar con el deposito");
-                    return false;
-                }
+                // }else if (opdep == JOptionPane.NO_OPTION) {
+                //     System.out.println("\nNo continuar con el deposito");
+                //     return false;
+                // }
                 }
         }
         return false;
     }
 
-    public boolean realizarRetiro(String cantidadStr) {
+    public boolean saldoSuficiente(String cantidadStr) {
         double cantidad=0.0;
         System.out.println("Esta entrando a retiro TT");
         if(cantidadStr.isEmpty()){
-            JOptionPane.showMessageDialog(null, "Debe ingresar un monto.", "Error", JOptionPane.WARNING_MESSAGE);
+            // JOptionPane.showMessageDialog(null, "Debe ingresar un monto.", "Error", JOptionPane.WARNING_MESSAGE);
         }else{
             try {
                 cantidad = Double.parseDouble(cantidadStr);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Monto no num\u00E9rico", "Error", JOptionPane.ERROR_MESSAGE);
+                // JOptionPane.showMessageDialog(null, "Monto no num\u00E9rico", "Error", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
             if (cantidad <= 0) {
-                JOptionPane.showMessageDialog(null, "Cantidad no v\u00E1lida.", "Error", JOptionPane.ERROR_MESSAGE);
+                // JOptionPane.showMessageDialog(null, "Cantidad no v\u00E1lida.", "Error", JOptionPane.ERROR_MESSAGE);
             }else if(cantidad>usuarioSaldo){
             System.out.println("Saldo insuficiente.");
-            JOptionPane.showMessageDialog(null, "Saldo insuficiente.", "Error", JOptionPane.WARNING_MESSAGE);
+            // JOptionPane.showMessageDialog(null, "Saldo insuficiente.", "Error", JOptionPane.WARNING_MESSAGE);
+            
         }else{
-            int opre = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de retirar "+cantidadStr+" Bs. ?", "Confirmar", JOptionPane.YES_NO_OPTION);
-                if (opre == JOptionPane.YES_OPTION) {
-                    usuarioSaldo -= cantidad;
-                    System.out.println("\nDepósito==" + usuarioSaldo);
-                    try {
-                        // actualizarSaldo(connection, saldo); 
-                        // registrarOperacion(connection, "Retiro", -cantidad); 
+            return true;
+        }
+    }
+        return false;
+    }
+    
+    public boolean realizarRetiro(String cantidadStr){
+        double cantidad = Double.parseDouble(cantidadStr);
+        try {
+            System.out.println("antes TT"+(usuarioSaldo-cantidad));
+                        usuarioDao.actualizarSaldo(usuarioSaldo-cantidad, usuarioId); 
+                        System.out.println("despues"+(usuarioSaldo-cantidad));
+                        System.out.println(getSaldo()+"bl");
+                        historicoDao.registrarOperacion(usuarioId, "Retiro", -cantidad); 
                         System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + usuarioSaldo);
-                        JOptionPane.showMessageDialog(null, "Retiro realizado con \u00E9xito. Su nuevo saldo es: " + usuarioSaldo+" Bs.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        // JOptionPane.showMessageDialog(null, "Retiro realizado con \u00E9xito. Su nuevo saldo es: " + usuarioSaldo+" Bs.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                         return true;
                     } catch (Exception ex) {
                         System.out.println("Error al realizar el retiro.");
                         ex.printStackTrace();
+                        return false;
                     }
-                }else if (opre == JOptionPane.NO_OPTION) {
-                    System.out.println("\nNo continuar con el deposito");
-                    return false;
-                } 
-            }
-        }
-        return false;
     }
 
     // public static void actualizarSaldo(Connection connection, double nuevoSaldo) throws SQLException {
@@ -265,35 +252,79 @@ public class AtmBL {
     //         ex.printStackTrace();
     //     }
     // }  
-    
-
-    public boolean cambiarPIN(int newPIN, int confirmPIN) throws SQLException {
-        if (newPIN == confirmPIN) {
-            // if(Integer.parseInt(getPinActual())==newPIN){
-                if(usuarioDao.getUsuarioPIN(usuarioId)==newPIN){
-                JOptionPane.showMessageDialog(null, "Esta ingresando el mismo PIN", "Observaci\u00F3n", JOptionPane.INFORMATION_MESSAGE);
-            }else{
-                int oppin = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de cambiar su pin?", "Confirmar", JOptionPane.YES_NO_OPTION);
-                if (oppin == JOptionPane.YES_OPTION) {
-                    try {
-                        // System.out.println("de "+getPinActual()+" a "+newPIN);
-                        // actualizarPIN(connection, newPIN);
-                        // registrarOperacion(connection, "Cambio de PIN", 0.0);
-                        JOptionPane.showMessageDialog(null, "PIN actualizado con \u00E9xito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                        return true;
-                    } catch (Exception ex) {
-                        System.out.println("Error al actualizar el PIN.");
-                        JOptionPane.showMessageDialog(null, "Error al actualizar el PIN.", "Error", JOptionPane.ERROR_MESSAGE);
-                        ex.printStackTrace();
-                    }
-                }
-            }
-            
-        } else {
-            System.out.println("Los PINs no coinciden.");
-            JOptionPane.showMessageDialog(null, "Los PINs no coinciden.", "Error", JOptionPane.WARNING_MESSAGE);
+    public boolean validarPIN(String pinStr){
+        int pin=Integer.parseInt(pinStr);
+        if(pin==getPin()){
+            return true;
+        }else{
+            return false;
         }
-        return false;
+    }
+
+    public boolean validarCambioPIN(String newPINStr, String confirmPINStr) throws SQLException {
+        // String nuevoPinStr = String.valueOf(nuevoPinField.getPassword());
+        // String confirmarNuevoPinStr = String.valueOf(confirmarPinField.getPassword());
+
+        // if (newPINStr.isEmpty() || confirmPINStr.isEmpty()) {
+        //     // JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
+        //     return false;
+        // }else{
+
+        // }
+        if(newPINStr.isEmpty() && confirmPINStr.isEmpty()){
+            // JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+            // exception.ExceptionMessage(0, "Ambos campos se encuentran vacios", "Campos vacios", 2);
+            return false;
+        }else if(newPINStr.isEmpty()){
+            // JOptionPane.showMessageDialog(null, "Debe ingresar un usuario", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }else if(confirmPINStr.isEmpty()){
+            // JOptionPane.showMessageDialog(null, "Debe ingresar el PIN", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }else if(newPINStr.isBlank() && confirmPINStr.isBlank()){
+            // JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+            // exception.ExceptionMessage(0, "Ambos campos se encuentran vacios", "Campos vacios", 2);
+            return false;
+        }else if(newPINStr.isBlank()){
+            // JOptionPane.showMessageDialog(null, "Debe ingresar un usuario", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }else if(confirmPINStr.isBlank()){
+            // JOptionPane.showMessageDialog(null, "Debe ingresar el PIN", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }else{
+            int newPIN = Integer.parseInt(newPINStr);
+            int confirmPIN = Integer.parseInt(confirmPINStr);
+            if (newPIN == confirmPIN) {
+                if(usuarioDao.getUsuarioPIN(usuarioId)==newPIN){
+                    return false;
+                // JOptionPane.showMessageDialog(null, "Esta ingresando el mismo PIN", "Observaci\u00F3n", JOptionPane.INFORMATION_MESSAGE);
+                }else{
+                    
+                    return true;
+                }
+            
+            } else {
+                System.out.println("Los PINs no coinciden.");
+                return false;
+                // JOptionPane.showMessageDialog(null, "Los PINs no coinciden.", "Error", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+
+    public boolean cambiarPIN(String newPINStr){
+        int newPIN = Integer.parseInt(newPINStr);
+        try {
+                            // System.out.println("de "+getPinActual()+" a "+newPIN);
+                            usuarioDao.actualizarPIN(newPIN, usuarioId);
+                            historicoDao.registrarOperacion(usuarioId, "Cambio de PIN", 0.0);
+                            // JOptionPane.showMessageDialog(null, "PIN actualizado con \u00E9xito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                            return true;
+                        } catch (Exception ex) {
+                            System.out.println("Error al actualizar el PIN.");
+                            // JOptionPane.showMessageDialog(null, "Error al actualizar el PIN.", "Error", JOptionPane.ERROR_MESSAGE);
+                            ex.printStackTrace();
+                            return false;
+                        }
     }
     // public static void actualizarPIN(Connection connection, int nuevoPin) throws SQLException {
     //     String query = "UPDATE usuarios SET pin = ? WHERE id = ?";

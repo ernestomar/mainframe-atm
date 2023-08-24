@@ -95,7 +95,7 @@ public class UsuarioDao {
         return saldo;
     }
 
-    public static void actualizarSaldo(double nuevoSaldo, int usuarioId) throws SQLException {
+    public void actualizarSaldo(double nuevoSaldo, int usuarioId) throws SQLException {
         String query = "UPDATE usuarios SET saldo = ? WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setDouble(1, nuevoSaldo);
@@ -108,7 +108,7 @@ public class UsuarioDao {
         }
     }
 
-    public static void actualizarPIN(int nuevoPin, int usuarioId) throws SQLException {
+    public void actualizarPIN(int nuevoPin, int usuarioId) throws SQLException {
         String query = "UPDATE usuarios SET pin = ? WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, nuevoPin);

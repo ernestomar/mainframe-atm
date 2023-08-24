@@ -2,6 +2,8 @@ package bo.edu.ucb.sis213.view;
 
 import javax.swing.*;
 
+import bo.edu.ucb.sis213.bl.AtmBL;
+
 // import bo.edu.ucb.sis213.Controller.Controller;
 
 import java.awt.*;
@@ -18,7 +20,7 @@ public class CambiarPinView {
     // private Controller controller;
 
 
-    public CambiarPinView(Connection connection) {
+    public CambiarPinView(AtmBL bl) {
         // this.controller = new Controller(connection);
         // this.model = new BackModel(connection);
         frame = new JFrame("Cambiar PIN");
@@ -63,7 +65,42 @@ public class CambiarPinView {
                         aceptarButton.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                cambiar();
+                                String nuevoPinStr = String.valueOf(nuevoPinField.getPassword());
+                                String confirmarNuevoPinStr = String.valueOf(confirmarPinField.getPassword());
+                                try {
+                                    if(bl.validarCambioPIN(nuevoPinStr,confirmarNuevoPinStr)){
+                                        // close();
+                                        int oppin = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de cambiar de PIN", "Confirmar", JOptionPane.YES_NO_OPTION);
+                                        if (oppin == JOptionPane.YES_OPTION) {
+                                            try {
+                                                if(bl.cambiarPIN(nuevoPinStr)){
+                                                    System.out.println(bl.getSaldo()+"view");
+                                                    JOptionPane.showMessageDialog(null, "Cambio de pin realizado con \u00E9xito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                                                    close();
+                                                }else{
+                                                    return;
+                                                }
+                                            } catch (Exception ex) {
+                                                System.out.println("Error Ss TT");
+                                                ex.printStackTrace();
+                                                JOptionPane.showMessageDialog(null, "Error al realizar el cambio de pin: "+ex, "Error", JOptionPane.ERROR_MESSAGE);
+                                                close();
+                                            }
+                                            System.out.println("\nDepósito==" + bl.getSaldo());
+                                            
+                                        }else if (oppin == JOptionPane.NO_OPTION) {
+                                            System.out.println("\nNo continuar con el cambio");
+                                            return;
+                                        }
+                                    }else{
+                                        return;
+                                    }
+                                } catch (Exception ex) {
+                                    System.out.println("Ayuda Sofia TT.");
+                                    ex.printStackTrace();
+                                    JOptionPane.showMessageDialog(null, "Error: "+ex, "Error", JOptionPane.ERROR_MESSAGE);
+                                    close();
+                                }
                             }
                         });
 

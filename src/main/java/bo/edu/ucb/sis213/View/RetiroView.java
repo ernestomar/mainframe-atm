@@ -2,6 +2,8 @@ package bo.edu.ucb.sis213.view;
 
 import javax.swing.*;
 
+import bo.edu.ucb.sis213.bl.AtmBL;
+
 // import bo.edu.ucb.sis213.Controller.Controller;
 
 import java.awt.*;
@@ -16,7 +18,7 @@ public class RetiroView {
     private JButton cancelarButton;
     // private Controller controller;
 
-    public RetiroView(Connection connection) {
+    public RetiroView(AtmBL bl) {
         frame = new JFrame("Retiro");
         // this.controller = new Controller(connection);
         frame.setSize(550, 350);
@@ -52,27 +54,39 @@ public class RetiroView {
                 aceptarButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        retirar();
+                        String cantidadStr = cantidadField.getText();
+                        if(bl.saldoSuficiente(cantidadStr)){
+                            int opre = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de retirar "+cantidadStr+" Bs. ?", "Confirmar", JOptionPane.YES_NO_OPTION);
+                            if (opre == JOptionPane.YES_OPTION) {
+                                try {
+                                    if(bl.realizarRetiro(cantidadStr)){
+                                        System.out.println(bl.getSaldo()+"view");
+                                        JOptionPane.showMessageDialog(null, "Retiro realizado con \u00E9xito. Su nuevo saldo es: " + bl.getSaldo()+" Bs.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                                        close();
+                                    }else{
+                                        return;
+                                    }
+                                } catch (Exception ex) {
+                                    System.out.println("Error Ss TT");
+                                    ex.printStackTrace();
+                                    JOptionPane.showMessageDialog(null, "Error al realizar el dep\retiro: "+ex, "Error", JOptionPane.ERROR_MESSAGE);
+                                    close();
+                                }
+                                System.out.println("\nDepósito==" + bl.getSaldo());
+                                
+                            }else if (opre == JOptionPane.NO_OPTION) {
+                                System.out.println("\nNo continuar con el deposito");
+                                return;
+                            }
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Su saldo insuficiente", "Saldo", JOptionPane.WARNING_MESSAGE);
+                        }
+                    
+                        
                     }
                 });
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
-    }
-
-    public void retirar(){
-        String cantidadStr = cantidadField.getText();
-        try {
-            // if(controller.realizarRetiro(cantidadStr)){
-            //     close();
-            // }else{
-            //     return;
-            // }
-        } catch (Exception ex) {
-            System.out.println("Error Ss TT");
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al realizar el dep\u00F3sito: "+ex, "Error", JOptionPane.ERROR_MESSAGE);
-            close();
-        }
     }
     public void close() {
         frame.dispose();

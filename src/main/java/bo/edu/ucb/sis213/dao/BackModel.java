@@ -18,50 +18,50 @@ public class BackModel {
 
     }
 
-    public boolean validarCredenciales(String usuario, String pin) {
-        if(usuario.isEmpty() && pin.isEmpty()){
-            JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-        }else if(usuario.isEmpty()){
-            JOptionPane.showMessageDialog(null, "Debe ingresar un usuario", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-        }else if(pin.isEmpty()){
-            JOptionPane.showMessageDialog(null, "Debe ingresar el PIN", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-        }else{
-            String query = "SELECT id FROM usuarios WHERE alias = ? AND pin = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, usuario);
-            preparedStatement.setString(2, pin);
-            ResultSet resultSet = preparedStatement.executeQuery();
+    // public boolean validarCredenciales(String usuario, String pin) {
+    //     if(usuario.isEmpty() && pin.isEmpty()){
+    //         JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+    //     }else if(usuario.isEmpty()){
+    //         JOptionPane.showMessageDialog(null, "Debe ingresar un usuario", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+    //     }else if(pin.isEmpty()){
+    //         JOptionPane.showMessageDialog(null, "Debe ingresar el PIN", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+    //     }else{
+    //         String query = "SELECT id FROM usuarios WHERE alias = ? AND pin = ?";
+    //     try {
+    //         PreparedStatement preparedStatement = connection.prepareStatement(query);
+    //         preparedStatement.setString(1, usuario);
+    //         preparedStatement.setString(2, pin);
+    //         ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()) {
-                usuarioId = resultSet.getInt("id");
-                System.out.println("truee"+intentosRestantes);
-                intentosRestantes = 3; // Reiniciar los intentos restantes
-                System.out.println("truee"+intentosRestantes);
-                JOptionPane.showMessageDialog(null, "PIN correcto", "Acceso permitido", JOptionPane.INFORMATION_MESSAGE);
-                return true;
-            } else {
-                intentosRestantes--;
-                System.out.println("false"+intentosRestantes);
-                if (intentosRestantes > 0) {
-                    System.out.println("PIN incorrecto. Le quedan " + intentosRestantes + " intentos.");//joption2
-                    JOptionPane.showMessageDialog(null, "PIN incorrecto. Le quedan " + intentosRestantes + " intentos.", "Error", JOptionPane.WARNING_MESSAGE);
-                    // return false;
-                } else {
-                    System.out.println("PIN incorrecto. Ha excedido el número de intento(s)."); //joption3
-                    JOptionPane.showMessageDialog(null, "PIN incorrecto. Ha excedido el n\u00FAmero de intentos.", "Error", JOptionPane.ERROR_MESSAGE);
-                    System.exit(0);
-                }
-                return false;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    //         if (resultSet.next()) {
+    //             usuarioId = resultSet.getInt("id");
+    //             System.out.println("truee"+intentosRestantes);
+    //             intentosRestantes = 3; // Reiniciar los intentos restantes
+    //             System.out.println("truee"+intentosRestantes);
+    //             JOptionPane.showMessageDialog(null, "PIN correcto", "Acceso permitido", JOptionPane.INFORMATION_MESSAGE);
+    //             return true;
+    //         } else {
+    //             intentosRestantes--;
+    //             System.out.println("false"+intentosRestantes);
+    //             if (intentosRestantes > 0) {
+    //                 System.out.println("PIN incorrecto. Le quedan " + intentosRestantes + " intentos.");//joption2
+    //                 JOptionPane.showMessageDialog(null, "PIN incorrecto. Le quedan " + intentosRestantes + " intentos.", "Error", JOptionPane.WARNING_MESSAGE);
+    //                 // return false;
+    //             } else {
+    //                 System.out.println("PIN incorrecto. Ha excedido el número de intento(s)."); //joption3
+    //                 JOptionPane.showMessageDialog(null, "PIN incorrecto. Ha excedido el n\u00FAmero de intentos.", "Error", JOptionPane.ERROR_MESSAGE);
+    //                 System.exit(0);
+    //             }
+    //             return false;
+    //         }
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
             
-        }
+    //     }
         
-        }
-        return false;
-    }
+    //     }
+    //     return false;
+    // }
 
     // public double getSaldo() {
     //     String query = "SELECT saldo FROM usuarios WHERE id = ?";

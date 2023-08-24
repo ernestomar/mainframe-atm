@@ -20,7 +20,7 @@ public class HistoricoDao {
         
     }
 
-    public static void registrarOperacion(int usuarioId, String tipoOperacion, double cantidad) throws SQLException {
+    public void registrarOperacion(int usuarioId, String tipoOperacion, double cantidad) throws SQLException {
         String insertQuery = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, ?, ?)";
         try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
             insertStatement.setInt(1, usuarioId);

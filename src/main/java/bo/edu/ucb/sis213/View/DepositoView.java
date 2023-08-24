@@ -2,6 +2,8 @@ package bo.edu.ucb.sis213.view;
 
 import javax.swing.*;
 
+import bo.edu.ucb.sis213.bl.AtmBL;
+
 // import bo.edu.ucb.sis213.Controller.Controller;
 
 import java.awt.*;
@@ -17,7 +19,7 @@ public class DepositoView {
     // private Controller controller;
     // private BackModel model;
 
-    public DepositoView(Connection connection) {
+    public DepositoView(AtmBL bl) {
         frame = new JFrame("Depósito");
         // this.model = new BackModel(connection);
         // this.controller = new Controller(connection);
@@ -53,28 +55,34 @@ public class DepositoView {
         aceptarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                depositar();
+                String cantidadStr = cantidadField.getText();
+                int opdep = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de dep\u00F3sitar "+cantidadStr+" Bs. ?", "Confirmar", JOptionPane.YES_NO_OPTION);
+                if (opdep == JOptionPane.YES_OPTION) {
+                    try {
+                        System.out.println("cant: "+cantidadStr);
+                        if(bl.realizarDeposito(cantidadStr)){//si guardo?
+                            JOptionPane.showMessageDialog(null, "Dep\u00F3sito realizado con \u00E9xito. Su nuevo saldo es: " + bl.getSaldo()+" Bs.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                            close();
+                        }else{
+                            return;
+                        }   
+                    } catch (Exception ex) {
+                        System.out.println("Error S TT");
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Error al realizar el dep\u00F3sito: "+ex, "Error", JOptionPane.ERROR_MESSAGE);
+                        close();
+                    }
+                }else if (opdep == JOptionPane.NO_OPTION) {
+                    System.out.println("\nNo continuar con el deposito");
+                    return;
+                }
+                
             }
         });
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
     }
-    public void depositar(){
-        String cantidadStr = cantidadField.getText();
-        try {
-            System.out.println("cant: "+cantidadStr);
-            // if(controller.realizarDeposito(cantidadStr)){//si guardo?
-            //     close();
-            // }else{
-            //     return;
-            // }   
-        } catch (Exception ex) {
-            System.out.println("Error S TT");
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al realizar el dep\u00F3sito: "+ex, "Error", JOptionPane.ERROR_MESSAGE);
-            close();
-        }
-    }
+    
 
     public void close() {
         frame.dispose();
