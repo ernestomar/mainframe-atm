@@ -8,9 +8,6 @@ import bo.edu.ucb.sis213.bl.AtmBL;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-
-// import bo.edu.ucb.sis213.Controller.App;
 
 public class LoginView {
     private JPanel loginPanel;
@@ -23,8 +20,6 @@ public class LoginView {
 
 
     public LoginView(AtmBL bl) {
-        // this.controller = new App(connection);
-        // this.util = new Exceptions();
         bl2=bl;
         frame = new JFrame("ATM App");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -96,16 +91,6 @@ public class LoginView {
         btnNewButton.setBounds(594, 382, 85, 21);
         loginPanel.add(btnNewButton);
     }
-    // public void validarCredencialesV(String usuario, String pin) {
-    //     if (controller.validarEntrada(usuario, pin)) {
-    //         close();
-    //         // menuView = new MenuView(connection, usuario);//controññer
-    //         controller.mostrarMenu(usuario);
-    //         System.out.println("ABRIMOS MENU :D");
-    //     }else{
-    //         return;
-    //     }
-    // }
 
     public void close() {
         frame.dispose();

@@ -4,10 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.ModuleLayer.Controller;
-import java.sql.Connection;
-
-// import bo.edu.ucb.sis213.Controller.Controller;
 import bo.edu.ucb.sis213.bl.AtmBL;
 
 import javax.swing.border.LineBorder;
@@ -20,7 +16,6 @@ public class MenuView {
     private JButton changePinButton;
     private JButton exitButton;
     private JFrame frame;
-    private Controller controller;
     private JButton btnNewButton;
 
     public MenuView(AtmBL bl) {
@@ -111,8 +106,6 @@ public class MenuView {
                 }else{
                     return;
                 }
-                // controller.validarPIN(2, frame);
-                
             }
         });
 

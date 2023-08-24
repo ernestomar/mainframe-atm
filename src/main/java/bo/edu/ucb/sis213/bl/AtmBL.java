@@ -1,10 +1,6 @@
 package bo.edu.ucb.sis213.bl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
 
 import bo.edu.ucb.sis213.dao.HistoricoDao;
 import bo.edu.ucb.sis213.dao.UsuarioDao;
@@ -12,14 +8,11 @@ import bo.edu.ucb.sis213.dao.UsuarioDao;
 public class AtmBL {
     private UsuarioDao usuarioDao;
     private HistoricoDao historicoDao;
-    // private Exceptions util;
 
     private static int usuarioId;
     private int usuarioPin;
     private String usuarioNombre;
     private double usuarioSaldo;
-    // private double saldo;
-    // private Connection connection;
     private int intentosRestantes;
     private String textoE="texto",tituloE="titulo";
 
@@ -27,12 +20,6 @@ public class AtmBL {
         this.usuarioDao = new UsuarioDao();
         this.historicoDao = new HistoricoDao();
         intentosRestantes = 3;
-        //this.util = new Exceptions(textoE,tituloE,0);
-        // usuarioId=usuarioDao.getUsuarioID(usuario, pin);
-        // pin=usuarioDao.getUsuarioPIN(usuarioId);
-        // nombre=usuarioDao.getUsuarioNombre(usuarioId);
-        // System.out.println(usuarioId);
-        // saldo=usuarioDao.getSaldo(usuarioId);
         usuarioSaldo=0;
         usuarioId=0;
         usuarioPin=0;
@@ -60,6 +47,9 @@ public class AtmBL {
     }
     public String getTituloE(){
         return tituloE;
+    }
+    public int getIntentosRestantes() {
+        return intentosRestantes;
     }
 
     public boolean validarLoginBL(String usuario, String pin){
@@ -249,28 +239,43 @@ public class AtmBL {
         if(newPINStr.isEmpty() && confirmPINStr.isEmpty()){
             // JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
             // exception.ExceptionMessage(0, "Ambos campos se encuentran vacios", "Campos vacios", 2);
+            
+            textoE="Ambos campos se encuentran vacios";
+            tituloE="Campos Vacios";
             return false;
         }else if(newPINStr.isEmpty()){
             // JOptionPane.showMessageDialog(null, "Debe ingresar un usuario", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+            textoE="Debe ingresar un usuario";
+            tituloE="Campos Vacios";
             return false;
         }else if(confirmPINStr.isEmpty()){
             // JOptionPane.showMessageDialog(null, "Debe ingresar el PIN", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+            textoE="Debe ingresar un PIN";
+            tituloE="Campos Vacios";
             return false;
         }else if(newPINStr.isBlank() && confirmPINStr.isBlank()){
             // JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
             // exception.ExceptionMessage(0, "Ambos campos se encuentran vacios", "Campos vacios", 2);
+            textoE="Ambos campos se encuentran vacios";
+            tituloE="Campos Vacios";
             return false;
         }else if(newPINStr.isBlank()){
             // JOptionPane.showMessageDialog(null, "Debe ingresar un usuario", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+            textoE="Debe ingresar un usuario";
+            tituloE="Campos Vacios";
             return false;
         }else if(confirmPINStr.isBlank()){
             // JOptionPane.showMessageDialog(null, "Debe ingresar el PIN", "Campos vacios", JOptionPane.WARNING_MESSAGE);
+            textoE="Debe ingresar un PIN";
+            tituloE="Campos Vacios";
             return false;
         }else{
             int newPIN = Integer.parseInt(newPINStr);
             int confirmPIN = Integer.parseInt(confirmPINStr);
             if (newPIN == confirmPIN) {
                 if(usuarioDao.getUsuarioPIN(usuarioId)==newPIN){
+                    textoE="Esta ingresando el mismo PIN";
+                    tituloE="Observación";    
                     return false;
                 // JOptionPane.showMessageDialog(null, "Esta ingresando el mismo PIN", "Observaci\u00F3n", JOptionPane.INFORMATION_MESSAGE);
                 }else{
@@ -280,6 +285,8 @@ public class AtmBL {
             
             } else {
                 System.out.println("Los PINs no coinciden.");
+                textoE="Los pin no coinciden";
+                tituloE="Error";
                 return false;
                 // JOptionPane.showMessageDialog(null, "Los PINs no coinciden.", "Error", JOptionPane.WARNING_MESSAGE);
             }
@@ -301,39 +308,5 @@ public class AtmBL {
                             return false;
                         }
     }
-    // public static void actualizarPIN(Connection connection, int nuevoPin) throws SQLException {
-    //     String query = "UPDATE usuarios SET pin = ? WHERE id = ?";
-    //     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-    //         preparedStatement.setInt(1, nuevoPin);
-    //         preparedStatement.setInt(2, usuarioId);
-    //         preparedStatement.executeUpdate();
-    //     } catch (SQLException ex) {
-    //         System.out.println("Error al actualizar el PIN.");
-    //         ex.printStackTrace();
-    //     }
-    // }
     
-    
-
-    
-
-    // public String getPinActual() {
-    //     String query = "SELECT pin FROM usuarios WHERE id = ?";
-    //     try {
-    //         PreparedStatement preparedStatement = connection.prepareStatement(query);
-    //         preparedStatement.setInt(1, usuarioId);
-    //         ResultSet resultSet = preparedStatement.executeQuery();
-
-    //         if (resultSet.next()) {
-    //             return resultSet.getString("pin");
-    //         }
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //     }
-    //     return ""; 
-    // }
-
-    public int getIntentosRestantes() {
-        return intentosRestantes;
-    }
 }

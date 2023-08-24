@@ -9,20 +9,15 @@ import bo.edu.ucb.sis213.bl.AtmBL;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 
 public class DepositoView {
     private JFrame frame;
     private JTextField cantidadField;
     private JButton aceptarButton;
     private JButton cancelarButton;
-    // private Controller controller;
-    // private BackModel model;
 
     public DepositoView(AtmBL bl) {
         frame = new JFrame("Depósito");
-        // this.model = new BackModel(connection);
-        // this.controller = new Controller(connection);
         frame.setSize(550, 350);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().setLayout(new BorderLayout());
@@ -64,6 +59,7 @@ public class DepositoView {
                             JOptionPane.showMessageDialog(null, "Dep\u00F3sito realizado con \u00E9xito. Su nuevo saldo es: " + bl.getSaldo()+" Bs.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                             close();
                         }else{
+                            JOptionPane.showMessageDialog(frame, bl.getTextoE(), bl.getTituloE(), JOptionPane.WARNING_MESSAGE);
                             return;
                         }   
                     } catch (Exception ex) {

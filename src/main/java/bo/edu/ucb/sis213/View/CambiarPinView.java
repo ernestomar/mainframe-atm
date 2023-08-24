@@ -9,7 +9,6 @@ import bo.edu.ucb.sis213.bl.AtmBL;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 
 public class CambiarPinView {
     private JFrame frame;
@@ -17,12 +16,9 @@ public class CambiarPinView {
     private JPasswordField confirmarPinField;
     private JButton aceptarButton;
     private JButton cancelarButton;
-    // private Controller controller;
 
 
     public CambiarPinView(AtmBL bl) {
-        // this.controller = new Controller(connection);
-        // this.model = new BackModel(connection);
         frame = new JFrame("Cambiar PIN");
         frame.setSize(700, 440);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -69,7 +65,7 @@ public class CambiarPinView {
                                 String confirmarNuevoPinStr = String.valueOf(confirmarPinField.getPassword());
                                 try {
                                     if(bl.validarCambioPIN(nuevoPinStr,confirmarNuevoPinStr)){
-                                        // close();
+                                        
                                         int oppin = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de cambiar de PIN", "Confirmar", JOptionPane.YES_NO_OPTION);
                                         if (oppin == JOptionPane.YES_OPTION) {
                                             try {
@@ -78,6 +74,7 @@ public class CambiarPinView {
                                                     JOptionPane.showMessageDialog(null, "Cambio de pin realizado con \u00E9xito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                                                     close();
                                                 }else{
+                                                    JOptionPane.showMessageDialog(frame, bl.getTextoE(), bl.getTituloE(), JOptionPane.WARNING_MESSAGE);
                                                     return;
                                                 }
                                             } catch (Exception ex) {
@@ -106,30 +103,6 @@ public class CambiarPinView {
 
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
-    }
-
-    public void cambiar(){
-        String nuevoPinStr = String.valueOf(nuevoPinField.getPassword());
-        String confirmarNuevoPinStr = String.valueOf(confirmarPinField.getPassword());
-        if (nuevoPinStr.isEmpty() || confirmarNuevoPinStr.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }else{
-            int nuevoPin = Integer.parseInt(nuevoPinStr);
-            int confirmarNuevoPin = Integer.parseInt(confirmarNuevoPinStr);
-            try {
-                // if(controller.cambioPIN(nuevoPin,confirmarNuevoPin)){
-                //     close();
-                // }else{
-                //     return;
-                // }
-            } catch (Exception e) {
-                System.out.println("Ayuda Sofia TT.");
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Error: "+e, "Error", JOptionPane.ERROR_MESSAGE);
-                close();
-            }
-        }
     }
 
     public void close() {
