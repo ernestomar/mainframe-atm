@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 public class UsuarioDao {
     private static Connection connection = null;
-    private int intentos;
     
     public UsuarioDao() {
         try {
@@ -17,7 +16,6 @@ public class UsuarioDao {
             ex.printStackTrace();
             System.exit(1);
         }
-        intentos = 3;    
     }
 
     public int getUsuarioID(String alias, int pin){
