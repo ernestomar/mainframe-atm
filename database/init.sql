@@ -1,4 +1,4 @@
--- Crear la tabla de usuarios (modificada para incluir el nombre)
+-- Crear la tabla de usuarios 
 CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL,

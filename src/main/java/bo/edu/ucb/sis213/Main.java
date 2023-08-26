@@ -1,11 +1,14 @@
 package bo.edu.ucb.sis213;
 
-import bo.edu.ucb.sis213.gui.ATMUsuario;
-
 import javax.swing.SwingUtilities;
+
+import bo.edu.ucb.sis213.bl.ATM;
+import bo.edu.ucb.sis213.dao.DatabaseManager;
+import bo.edu.ucb.sis213.view.ATMUsuario;
+import bo.edu.ucb.sis213.view.Bienvenido;
+
 import java.sql.Connection;
 import java.sql.SQLException;
-import bo.edu.ucb.sis213.gui.Bienvenido;
 
 public class Main {
     public static void main(String[] args) {

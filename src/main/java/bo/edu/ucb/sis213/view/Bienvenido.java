@@ -1,11 +1,12 @@
-package bo.edu.ucb.sis213.gui;
+package bo.edu.ucb.sis213.view;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import bo.edu.ucb.sis213.ATM;
-import bo.edu.ucb.sis213.DatabaseManager;
+
+import bo.edu.ucb.sis213.bl.ATM;
+import bo.edu.ucb.sis213.dao.DatabaseManager;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;

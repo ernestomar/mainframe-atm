@@ -1,4 +1,4 @@
-package bo.edu.ucb.sis213.gui;
+package bo.edu.ucb.sis213.view;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -14,7 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import bo.edu.ucb.sis213.ATM;
+
+import bo.edu.ucb.sis213.bl.ATM;
 
 public class ATMUsuario extends JFrame {
 
@@ -116,22 +117,6 @@ public class ATMUsuario extends JFrame {
 		btnRealizarDeposito.setBackground(Color.WHITE);
 		btnRealizarDeposito.setBounds(300, 177, 205, 52);
 		contentPane.add(btnRealizarDeposito);
-
-		JButton btnCerrarSesion = new JButton("Cerrar Sesión");
-		btnCerrarSesion.setToolTipText("Click para cerrar sesión y volver a la ventana de Bienvenido");
-		btnCerrarSesion.setForeground(Color.BLACK);
-		btnCerrarSesion.setFont(new Font("Courier 10 Pitch", Font.BOLD, 14));
-		btnCerrarSesion.setBackground(Color.WHITE);
-		btnCerrarSesion.setBounds(53, 250, 179, 52);
-		contentPane.add(btnCerrarSesion);
-
-		btnCerrarSesion.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Bienvenido bienvenidoFrame = new Bienvenido(atm, connection);
-				bienvenidoFrame.setVisible(true);
-				dispose(); // Cierra la ventana actual
-			}
-		});
 
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
