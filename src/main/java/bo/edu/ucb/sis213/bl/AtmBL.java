@@ -1,7 +1,5 @@
 package bo.edu.ucb.sis213.bl;
 
-import java.sql.SQLException;
-
 import bo.edu.ucb.sis213.dao.HistoricoDao;
 import bo.edu.ucb.sis213.dao.UsuarioDao;
 
@@ -55,81 +53,112 @@ public class AtmBL {
         return intentosRestantes;
     }
 
-    public boolean validarLoginBL(String usuario, String pin){
-        if(validarUserBL(usuario, pin)){
-            return true;
-        }else{
-            if(intentosRestantes<=0){
-                System.exit(0);
-            }
-            return false;
-        }
-    }
-
-    public boolean validarUserBL(String usuario, String pin) {
-        if(usuario.isEmpty() && pin.isEmpty()){
+    public boolean comprobarCamposVacios(String ca1, String ca2) {
+        if((ca1.isEmpty() && ca2.isEmpty()) || ca1.isBlank() && ca2.isBlank()){
             textoE="Ambos campos se encuentran vacios";
             tituloE="Campos vacios";
             // JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
             return false;
-        }else if(usuario.isEmpty()){
+        }else if(ca1.isEmpty() || ca1.isBlank()){
             // JOptionPane.showMessageDialog(null, "Debe ingresar un usuario", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-            textoE="Debe ingresar un usuario";
+            textoE="Debe llenar el primer campo";
             tituloE="Campos vacios";
             return false;
-        }else if(pin.isEmpty()){
+        }else if(ca2.isEmpty() || ca2.isBlank()){
             // JOptionPane.showMessageDialog(null, "Debe ingresar el PIN", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-            textoE="Debe ingresar un PIN";
-            tituloE="Campos vacios";
-            return false;
-        }else if(usuario.isBlank() && pin.isBlank()){
-            // JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-            // exception.ExceptionMessage(0, "Ambos campos se encuentran vacios", "Campos vacios", 2);
-            textoE="Ambos campos se encuntran vacios";
-            tituloE="Campos vacios";
-            return false;
-        }else if(usuario.isBlank()){
-            // JOptionPane.showMessageDialog(null, "Debe ingresar un usuario", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-            textoE="Debe ingresar un usuario";
-            tituloE="Campos vacios";
-            return false;
-        }else if(pin.isBlank()){
-            // JOptionPane.showMessageDialog(null, "Debe ingresar el PIN", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-            textoE="Debe ingresar un PIN";
+            textoE="Debe llenar el segundo campo";
             tituloE="Campos vacios";
             return false;
         }else{
-            if(usuarioDao.getUsuarioID(usuario, Integer.parseInt(pin))>0){
-                usuarioId=usuarioDao.getUsuarioID(usuario, Integer.parseInt(pin));
-                usuarioPin=usuarioDao.getUsuarioPIN(usuarioId);
-                usuarioNombre=usuarioDao.getUsuarioNombre(usuarioId);
-                System.out.println(usuarioId);
-                usuarioSaldo=usuarioDao.getSaldo(usuarioId);
-                System.out.println("tamos aqui TT"+usuarioSaldo);
-                return true;
-            }else {
-                intentosRestantes--;
-                System.out.println("false"+intentosRestantes);
-                if (intentosRestantes > 0) {
-                    System.out.println("PIN incorrecto. Le quedan " + intentosRestantes + " intentos.");//joption2
-                    // JOptionPane.showMessageDialog(null, "PIN incorrecto. Le quedan " + intentosRestantes + " intentos.", "Error", JOptionPane.WARNING_MESSAGE);
-                    textoE="PIN incorrecto. Le quedan " + intentosRestantes + " intentos.";
+            return true; 
+        }
+    }
+    public boolean comprobarCantidad(String c){
+        double cantidad=0.0;
+        if(c.isEmpty() || c.isBlank()){
+            // JOptionPane.showMessageDialog(null, "Debe ingresar un monto.", "Error", JOptionPane.WARNING_MESSAGE);
+            textoE="Debe ingresar un monto.";
+            tituloE="Campo vacio";
+            return false;
+        }else{
+            try {
+                cantidad = Double.parseDouble(c);
+                if (cantidad <= 0) {
+                    // JOptionPane.showMessageDialog(null, "Cantidad no v\u00E1lida.", "Error", JOptionPane.ERROR_MESSAGE);
+                    textoE="Cantidad no v\\u00E1lida.";
                     tituloE="Error";
                     return false;
-                } else {
-                    System.out.println("PIN incorrecto. Ha excedido el número de intento(s)."); //joption3
-                    // JOptionPane.showMessageDialog(null, "PIN incorrecto. Ha excedido el n\u00FAmero de intentos.", "Error", JOptionPane.ERROR_MESSAGE);
+                }else{
+                    return true;
+                }
+            } catch (Exception e) {
+                // JOptionPane.showMessageDialog(null, "Monto no num\u00E9rico", "Error", JOptionPane.ERROR_MESSAGE);
+                textoE="Monto no num\\u00E9rico";
+                tituloE="Error";
+                return false;
+            }
+            
+        }
+
+    }
+
+    public boolean validarLoginBL(String usuario, String pin) {
+        if(intentosRestantes<=0){
+            System.exit(0);
+        }else{
+                if(comprobarCamposVacios(usuario, pin)){
+                    try {
+                        int npin=Integer.parseInt(pin);
+                        if(usuarioDao.getUsuarioID(usuario, npin) > 0 ){
+                            usuarioId=usuarioDao.getUsuarioID(usuario, Integer.parseInt(pin));
+                            usuarioPin=usuarioDao.getUsuarioPIN(usuarioId);
+                            usuarioNombre=usuarioDao.getUsuarioNombre(usuarioId);
+                            System.out.println(usuarioId);
+                            usuarioSaldo=usuarioDao.getSaldo(usuarioId);
+                            System.out.println("tamos aqui TT"+usuarioSaldo);
+                            return true;
+                        }else {
+                            intentosRestantes--;
+                            System.out.println("false"+intentosRestantes);
+                            if (intentosRestantes > 0) {
+                                System.out.println("PIN incorrecto. Le quedan " + intentosRestantes + " intentos.");//joption2
+                                // JOptionPane.showMessageDialog(null, "PIN incorrecto. Le quedan " + intentosRestantes + " intentos.", "Error", JOptionPane.WARNING_MESSAGE);
+                                textoE="PIN incorrecto. Le quedan " + intentosRestantes + " intentos.";
+                                tituloE="Error";
+                                return false;
+                            } else {
+                                System.out.println("PIN incorrecto. Ha excedido el número de intento(s)."); //joption3
+                                // JOptionPane.showMessageDialog(null, "PIN incorrecto. Ha excedido el n\u00FAmero de intentos.", "Error", JOptionPane.ERROR_MESSAGE);
+                                textoE="PIN incorrecto. Ha excedido el numero de intentos.";
+                                tituloE="Error";
+                                // System.exit(0);
+                                return false;
+                            }
+                        }
+                    } catch (Exception e) {//si la contraseña es string, no se le dira al usuario del error, solo se le descontaran intentos. Esto por más seguridad sobre el valor del pin
+                        intentosRestantes--;
+                            System.out.println("false"+intentosRestantes);
+                            if (intentosRestantes > 0) {
+                                System.out.println("PIN incorrecto. Le quedan " + intentosRestantes + " intentos.");//joption2
+                                // JOptionPane.showMessageDialog(null, "PIN incorrecto. Le quedan " + intentosRestantes + " intentos.", "Error", JOptionPane.WARNING_MESSAGE);
+                                textoE="PIN incorrecto. Le quedan " + intentosRestantes + " intentos.";
+                                tituloE="Error";
+                                return false;
+                            } else {
+                                System.out.println("PIN incorrecto. Ha excedido el número de intento(s)."); //joption3
+                                // JOptionPane.showMessageDialog(null, "PIN incorrecto. Ha excedido el n\u00FAmero de intentos.", "Error", JOptionPane.ERROR_MESSAGE);
+                                textoE="PIN incorrecto. Ha excedido el numero de intentos.";
+                                tituloE="Error";
+                                // System.exit(0);
+                                return false;
+                            }
+                    }
                     
-                    textoE="PIN incorrecto. Ha excedido el numero de intentos.";
-                    tituloE="Error";
-                    // System.exit(0);
+                }else{
                     return false;
                 }
             }
-
-                    
-        }
-        // return false;
+            return false;
     }
 
     public boolean realizarDeposito(String cantidadStr) {
@@ -238,78 +267,48 @@ public class AtmBL {
         }
     }
 
-    public boolean validarCambioPIN(String newPINStr, String confirmPINStr) throws SQLException {
-        if(newPINStr.isEmpty() && confirmPINStr.isEmpty()){
-            // JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-            // exception.ExceptionMessage(0, "Ambos campos se encuentran vacios", "Campos vacios", 2);
-            
-            textoE="Ambos campos se encuentran vacios";
-            tituloE="Campos Vacios";
-            return false;
-        }else if(newPINStr.isEmpty()){
-            // JOptionPane.showMessageDialog(null, "Debe ingresar un usuario", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-            textoE="Debe ingresar un PIN";
-            tituloE="Campos Vacios";
-            return false;
-        }else if(confirmPINStr.isEmpty()){
-            // JOptionPane.showMessageDialog(null, "Debe ingresar el PIN", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-            textoE="Debe ingresar un PIN";
-            tituloE="Campos Vacios";
-            return false;
-        }else if(newPINStr.isBlank() && confirmPINStr.isBlank()){
-            // JOptionPane.showMessageDialog(null, "Ambos campos se encuentran vacios", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-            // exception.ExceptionMessage(0, "Ambos campos se encuentran vacios", "Campos vacios", 2);
-            textoE="Ambos campos se encuentran vacios";
-            tituloE="Campos Vacios";
-            return false;
-        }else if(newPINStr.isBlank()){
-            // JOptionPane.showMessageDialog(null, "Debe ingresar un usuario", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-            textoE="Debe ingresar un usuario";
-            tituloE="Campos Vacios";
-            return false;
-        }else if(confirmPINStr.isBlank()){
-            // JOptionPane.showMessageDialog(null, "Debe ingresar el PIN", "Campos vacios", JOptionPane.WARNING_MESSAGE);
-            textoE="Debe ingresar un PIN";
-            tituloE="Campos Vacios";
-            return false;
-        }else{
-            int newPIN = Integer.parseInt(newPINStr);
-            int confirmPIN = Integer.parseInt(confirmPINStr);
-            if (newPIN == confirmPIN) {
-                if(usuarioDao.getUsuarioPIN(usuarioId)==newPIN){
-                    textoE="Esta ingresando el mismo PIN";
-                    tituloE="Observación";    
+    public boolean validarCambioPIN(String newPINStr, String confirmPINStr){
+        if(comprobarCamposVacios(newPINStr, confirmPINStr)){
+            try {
+                int newPIN = Integer.parseInt(newPINStr);
+                int confirmPIN = Integer.parseInt(confirmPINStr);
+                if (newPIN == confirmPIN) {
+                    if(usuarioDao.getUsuarioPIN(usuarioId)==newPIN){//pin nuevo igual que el antiguo
+                        textoE="Esta ingresando el mismo PIN";
+                        tituloE="Observación";    
+                        return false;
+                        // JOptionPane.showMessageDialog(null, "Esta ingresando el mismo PIN", "Observaci\u00F3n", JOptionPane.INFORMATION_MESSAGE);
+                    }else{
+                        return true;
+                    }
+                } else {
+                    System.out.println("Los PINs no coinciden.");
+                    textoE="Los pin no coinciden";
+                    tituloE="Error";
                     return false;
-                // JOptionPane.showMessageDialog(null, "Esta ingresando el mismo PIN", "Observaci\u00F3n", JOptionPane.INFORMATION_MESSAGE);
-                }else{
-                    
-                    return true;
+                    // JOptionPane.showMessageDialog(null, "Los PINs no coinciden.", "Error", JOptionPane.WARNING_MESSAGE);
                 }
-            
-            } else {
-                System.out.println("Los PINs no coinciden.");
-                textoE="Los pin no coinciden";
+            } catch (Exception e) {
+                textoE="El pin debe ser n\u00FAmerico (enteros)";
                 tituloE="Error";
                 return false;
-                // JOptionPane.showMessageDialog(null, "Los PINs no coinciden.", "Error", JOptionPane.WARNING_MESSAGE);
             }
+        }else{
+            return false;
         }
     }
 
     public boolean cambiarPIN(String newPINStr){
-        int newPIN = Integer.parseInt(newPINStr);
         try {
-                            // System.out.println("de "+getPinActual()+" a "+newPIN);
-                            usuarioDao.actualizarPIN(newPIN, usuarioId);
-                            historicoDao.registrarOperacion(usuarioId, "Cambio de PIN", 0.0);
-                            // JOptionPane.showMessageDialog(null, "PIN actualizado con \u00E9xito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                            return true;
-                        } catch (Exception ex) {
-                            System.out.println("Error al actualizar el PIN.");
-                            // JOptionPane.showMessageDialog(null, "Error al actualizar el PIN.", "Error", JOptionPane.ERROR_MESSAGE);
-                            ex.printStackTrace();
-                            return false;
-                        }
+                int newPIN = Integer.parseInt(newPINStr);
+                usuarioDao.actualizarPIN(newPIN, usuarioId);
+                historicoDao.registrarOperacion(usuarioId, "Cambio de PIN", 0.0);
+                // JOptionPane.showMessageDialog(null, "PIN actualizado con \u00E9xito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                return true;
+            } catch (Exception e) {
+                textoE="No se pudo cambiar el pin";
+                tituloE="Error";
+                return false;
+            }
     }
-    
 }

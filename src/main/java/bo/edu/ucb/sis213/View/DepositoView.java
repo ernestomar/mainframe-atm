@@ -4,8 +4,6 @@ import javax.swing.*;
 
 import bo.edu.ucb.sis213.bl.AtmBL;
 
-// import bo.edu.ucb.sis213.Controller.Controller;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
