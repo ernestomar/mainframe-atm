@@ -52,7 +52,11 @@ public class LoginView {
                         System.out.println("ABRIMOS MENU :D");
                     }else{
                         JOptionPane.showMessageDialog(frame, bl2.getTextoE(), bl2.getTituloE(), JOptionPane.WARNING_MESSAGE);
-                        return;
+                        if(bl2.getIntentosRestantes()<=0){
+                            System.exit(0);
+                        }else{
+                            return;
+                        }
                     }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(frame, ex.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
